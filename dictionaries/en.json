@@ -1,0 +1,95 @@
+{
+  "meta": {
+    "title": "Worlds LoL — Every League of Legends World Champion",
+    "description": "Hall of fame of every Worlds champion, with a countdown and live scores for the tournament."
+  },
+  "nav": {
+    "live": "Live",
+    "stats": "Numbers",
+    "hall": "Hall of fame",
+    "switchLabel": "ES",
+    "switchAria": "Cambiar a español"
+  },
+  "hero": {
+    "loading": "Worlds LoL",
+    "countdown": {
+      "eyebrow": "Next world championship",
+      "headline": "Countdown to Worlds {year}",
+      "body": "The best teams on the planet, one cup. This is where the story of every champion lives and, once the tournament starts, the scores in real time.",
+      "cardTitle": "Worlds {year} starts in",
+      "startsOn": "Starts {date}"
+    },
+    "live": {
+      "eyebrow": "Tournament in progress",
+      "headline": "Worlds {year} is underway",
+      "body": "The cup is decided over these days. Follow the tournament scores from here and see who has gone the furthest in history.",
+      "cardTitle": "Worlds {year} Final",
+      "finalOn": "{date} · {city}"
+    },
+    "celebration": {
+      "eyebrow": "Worlds {year} champion",
+      "headline": "A new cup has an owner",
+      "body": "The tournament is over. This page has already started counting toward the next Worlds.",
+      "cardTitle": "{year} champion",
+      "pending": "Confirming the champion…",
+      "beat": "beat {team} ({score})"
+    },
+    "tbd": {
+      "eyebrow": "Next world championship",
+      "headline": "Worlds {year}: date to be confirmed",
+      "body": "Riot hasn't published the dates yet. As soon as they're announced, the countdown starts on its own.",
+      "cardTitle": "Worlds {year}",
+      "cardBody": "Date to be confirmed"
+    },
+    "ctaHall": "See the hall of fame",
+    "ctaLive": "See live scores",
+    "ctaStats": "See the numbers"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "live": {
+    "title": "Live scores",
+    "subtitle": "Refreshes on its own every 30 seconds.",
+    "pending": "Automatic tracking gets connected in the next phase. In the meantime, follow the official broadcast at lolesports.com.",
+    "stale": "Showing the latest available data; the source was slow to respond.",
+    "empty": "No matches right now.",
+    "badgeLive": "Live",
+    "badgeUpcoming": "Upcoming",
+    "badgeFinished": "Final",
+    "minute": "Min {n}",
+    "bestOf": "Best of {n}",
+    "updated": "Updated {time}"
+  },
+  "stats": {
+    "title": "The numbers behind the throne",
+    "subtitle": "Who has won the most, and from where.",
+    "byRegion": "Titles by region",
+    "byTeam": "Organizations with the most titles",
+    "titleOne": "title",
+    "titleMany": "titles"
+  },
+  "regions": {
+    "LCK": "LCK · Korea",
+    "LPL": "LPL · China",
+    "EMEA": "EMEA · Europe",
+    "GPL": "GPL · Taiwan & SEA"
+  },
+  "hall": {
+    "title": "Hall of fame",
+    "subtitle": "Every champion, from 2011 to today.",
+    "champion": "Champion",
+    "final": "Final",
+    "vs": "vs",
+    "mvp": "Finals MVP",
+    "host": "Host",
+    "formerly": "Played as {name}"
+  },
+  "footer": {
+    "disclaimer": "Worlds LoL is a fan project and is not affiliated with Riot Games. League of Legends and Worlds are trademarks of Riot Games, Inc.",
+    "data": "Historical data: Wikipedia. Schedule and scores: LoL Esports."
+  }
+}

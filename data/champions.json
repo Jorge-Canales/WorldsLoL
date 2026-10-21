@@ -1,0 +1,17 @@
+[
+  { "year": 2011, "org": "Fnatic", "teamAtTime": "Fnatic", "region": "EMEA", "runnerUp": "Against All Authority", "score": "2-1", "city": "Jönköping", "countryCode": "SE", "mvp": "Shushei" },
+  { "year": 2012, "org": "Taipei Assassins", "teamAtTime": "Taipei Assassins", "region": "GPL", "runnerUp": "Azubu Frost", "score": "3-1", "city": "Los Angeles", "countryCode": "US", "mvp": null },
+  { "year": 2013, "org": "T1", "teamAtTime": "SK Telecom T1", "region": "LCK", "runnerUp": "Royal Club", "score": "3-0", "city": "Los Angeles", "countryCode": "US", "mvp": null },
+  { "year": 2014, "org": "Gen.G", "teamAtTime": "Samsung White", "region": "LCK", "runnerUp": "Star Horn Royal Club", "score": "3-1", "city": "Seoul", "countryCode": "KR", "mvp": "Mata" },
+  { "year": 2015, "org": "T1", "teamAtTime": "SK Telecom T1", "region": "LCK", "runnerUp": "KOO Tigers", "score": "3-1", "city": "Berlin", "countryCode": "DE", "mvp": "MaRin" },
+  { "year": 2016, "org": "T1", "teamAtTime": "SK Telecom T1", "region": "LCK", "runnerUp": "Samsung Galaxy", "score": "3-2", "city": "Los Angeles", "countryCode": "US", "mvp": "Faker" },
+  { "year": 2017, "org": "Gen.G", "teamAtTime": "Samsung Galaxy", "region": "LCK", "runnerUp": "SK Telecom T1", "score": "3-0", "city": "Beijing", "countryCode": "CN", "mvp": "Ruler" },
+  { "year": 2018, "org": "Invictus Gaming", "teamAtTime": "Invictus Gaming", "region": "LPL", "runnerUp": "Fnatic", "score": "3-0", "city": "Incheon", "countryCode": "KR", "mvp": "Ning" },
+  { "year": 2019, "org": "FunPlus Phoenix", "teamAtTime": "FunPlus Phoenix", "region": "LPL", "runnerUp": "G2 Esports", "score": "3-0", "city": "Paris", "countryCode": "FR", "mvp": "Tian" },
+  { "year": 2020, "org": "Dplus KIA", "teamAtTime": "Damwon Gaming", "region": "LCK", "runnerUp": "Suning", "score": "3-1", "city": "Shanghai", "countryCode": "CN", "mvp": "Canyon" },
+  { "year": 2021, "org": "Edward Gaming", "teamAtTime": "Edward Gaming", "region": "LPL", "runnerUp": "DWG KIA", "score": "3-2", "city": "Reykjavík", "countryCode": "IS", "mvp": "Scout" },
+  { "year": 2022, "org": "Kiwoom DRX", "teamAtTime": "DRX", "region": "LCK", "runnerUp": "T1", "score": "3-2", "city": "San Francisco", "countryCode": "US", "mvp": "Kingen" },
+  { "year": 2023, "org": "T1", "teamAtTime": "T1", "region": "LCK", "runnerUp": "Weibo Gaming", "score": "3-0", "city": "Seoul", "countryCode": "KR", "mvp": "Zeus" },
+  { "year": 2024, "org": "T1", "teamAtTime": "T1", "region": "LCK", "runnerUp": "Bilibili Gaming", "score": "3-2", "city": "London", "countryCode": "GB", "mvp": "Faker" },
+  { "year": 2025, "org": "T1", "teamAtTime": "T1", "region": "LCK", "runnerUp": "KT Rolster", "score": "3-2", "city": "Chengdu", "countryCode": "CN", "mvp": "Gumayusi" }
+]

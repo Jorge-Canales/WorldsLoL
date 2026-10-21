@@ -1,0 +1,614 @@
+/* ===== Tokens (basados en DESIGN.md) ===== */
+:root {
+  --color-blurple: #5865f2;
+  --color-dark-blurple: #3442d9;
+  --color-hover-blurple: #8891f2;
+  --color-spring-green: #57f287;
+  --color-fuchsia: #eb459e; /* corregido: en DESIGN.md estaba como #eb459 */
+  --color-vivid-cerulean: #00b0f4;
+  --color-ember-orange: #fda220;
+  --color-ekko-red: #de2761;
+  --color-snow: #ffffff;
+  --color-not-quite-black: #23272a;
+  --color-dark-charcoal: #2c2f33;
+  --color-fog: #babcd9;
+  --color-greyple: #99aab5;
+  --color-dim-grey: #50555f;
+
+  --surface-cosmic-page: #0e0f2d;
+  --surface-app-chrome: #23272a;
+  --surface-app-surface: #2c2f33;
+
+  --font-display: "Nunito Variable", "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radius-button: 12px;
+  --radius-card: 16px;
+  --radius-panel: 24px;
+  --radius-pill: 104px;
+
+  --page-max: 1200px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  background-color: var(--surface-cosmic-page);
+  /* resplandor suave del "cosmos", sin usar blurple en áreas grandes */
+  background-image:
+    radial-gradient(900px 520px at 85% -8%, rgba(46, 52, 150, 0.45), transparent 70%),
+    radial-gradient(700px 420px at -5% 12%, rgba(96, 36, 120, 0.28), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--color-fog);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: 0.014em;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-blurple);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.muted {
+  color: var(--color-fog);
+  margin: 0;
+}
+
+.small {
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+/* ===== Tipografía de titulares: Nunito 800, mayúsculas, apretada ===== */
+.display,
+.h2,
+.h3,
+.brand,
+.champ-year,
+.stage-champion,
+.unit-value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--color-snow);
+}
+
+.display {
+  font-size: clamp(40px, 6.2vw, 61px);
+  line-height: 0.92;
+  margin: 12px 0 20px;
+}
+
+.h2 {
+  font-size: clamp(34px, 4.6vw, 48px);
+  line-height: 0.98;
+  margin: 0 0 8px;
+}
+
+.h3 {
+  font-size: 28px;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-fog);
+}
+
+.lead {
+  max-width: 440px;
+  margin: 0 0 32px;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--color-fog);
+}
+
+/* ===== Botones ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-button);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.016em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--color-blurple);
+  color: var(--color-snow);
+  border: 0;
+  padding: 19.5px 24px;
+}
+.btn-primary:hover {
+  background: var(--color-dark-blurple);
+}
+
+.btn-secondary {
+  background: var(--color-snow);
+  color: var(--color-not-quite-black);
+  border: 1px solid var(--color-not-quite-black);
+  padding: 15px 24px;
+}
+.btn-secondary:hover {
+  background: #e9eaf5;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--color-snow);
+  border: 1px solid var(--color-snow);
+  padding: 10px 16px;
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ===== Navegación ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(14, 15, 45, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 72px;
+}
+.brand {
+  font-size: 26px;
+  text-decoration: none;
+  margin: 0;
+}
+.brand span {
+  color: var(--color-fog);
+}
+.nav-links {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.nav-links a {
+  padding: 10px 14px;
+  border-radius: var(--radius-button);
+  color: var(--color-snow);
+  text-decoration: none;
+  font-weight: 500;
+}
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== Hero ===== */
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  align-items: center;
+  gap: 48px;
+  padding-top: 72px;
+  padding-bottom: 96px;
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero-stage {
+  position: relative;
+}
+.hero-trophy {
+  position: absolute;
+  width: 110px;
+  right: -14px;
+  bottom: -44px;
+  transform: rotate(8deg);
+  pointer-events: none;
+}
+
+/* Tarjeta de escena: cada estado tiene su propio fondo */
+.stage {
+  border-radius: var(--radius-panel);
+  padding: 40px;
+  min-height: 320px;
+  color: var(--color-snow);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+.stage-purple { background: linear-gradient(135deg, #7a2790, #c2308a); }
+.stage-green { background: linear-gradient(135deg, #0b5a3e, #14875a); }
+.stage-blue { background: linear-gradient(135deg, #0a4478, #0b7fb8); }
+.stage-orange { background: linear-gradient(135deg, #8f3a06, #c26d0a); }
+
+.stage-title {
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.stage-big {
+  margin: 4px 0 8px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.1;
+}
+.stage-note {
+  margin: 8px 0 0;
+  font-size: 16px;
+}
+.stage-champion {
+  margin: 8px 0 0;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 0.9;
+}
+.card-skeleton {
+  min-height: 240px;
+}
+
+.live-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin: 0 0 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 15, 45, 0.45);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-spring-green);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.8); }
+}
+
+/* ===== Contador ===== */
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+.unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 4px 12px;
+  border-radius: var(--radius-card);
+  background: rgba(14, 15, 45, 0.4);
+}
+.unit-value {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.unit-label {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-fog);
+}
+
+/* ===== Secciones ===== */
+.section {
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+.section-head {
+  margin-bottom: 36px;
+}
+
+.panel {
+  background: var(--surface-app-chrome);
+  border-radius: var(--radius-panel);
+  padding: 32px;
+}
+
+/* ===== Marcadores ===== */
+.matches {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.match {
+  background: var(--surface-app-surface);
+  border-radius: var(--radius-card);
+  padding: 16px 20px;
+}
+.match-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.badge {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-not-quite-black);
+}
+.badge-live { background: var(--color-spring-green); }
+.badge-upcoming { background: var(--color-vivid-cerulean); }
+.badge-finished { background: var(--color-fog); }
+.match-teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+}
+.team {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--color-snow);
+}
+.team-right {
+  text-align: right;
+}
+.score {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--color-snow);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Tarjetas de sección (sin sombras, el color es la elevación) ===== */
+.feature {
+  border-radius: var(--radius-panel);
+  padding: 40px;
+  color: var(--color-snow);
+}
+.feature-purple { background: linear-gradient(135deg, #7a2790, #c2308a); }
+.feature-green { background: linear-gradient(135deg, #0b5a3e, #14875a); }
+.feature-blue { background: linear-gradient(135deg, #0a4478, #0b7fb8); }
+.feature-orange { background: linear-gradient(135deg, #8f3a06, #c26d0a); }
+
+/* ===== Estadísticas ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.bars {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.bar-track {
+  height: 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 15, 45, 0.4);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-snow);
+}
+
+/* ===== Salón de la fama ===== */
+.hall-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.champ {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+}
+.champ-latest {
+  grid-column: span 3;
+  padding: 48px;
+}
+.champ-year {
+  margin: 0;
+  font-size: 56px;
+  line-height: 0.86;
+}
+.champ-latest .champ-year {
+  font-size: 61px;
+}
+.champ-label {
+  margin: 14px 0 4px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.champ-name {
+  font-size: 32px;
+}
+.champ-latest .champ-name {
+  font-size: 48px;
+  line-height: 0.93;
+}
+.champ-sub {
+  margin: 4px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+.champ-facts {
+  margin: 24px 0 0;
+  display: grid;
+  gap: 12px;
+}
+.champ-latest .champ-facts {
+  grid-template-columns: repeat(3, 1fr);
+}
+.champ-facts dt {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.champ-facts dd {
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+.champ-region {
+  align-self: flex-start;
+  margin-top: 24px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: rgba(14, 15, 45, 0.4);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: var(--surface-app-chrome);
+  padding: 56px 0;
+}
+.footer-inner {
+  display: grid;
+  gap: 12px;
+  font-size: 14px;
+  color: var(--color-fog);
+}
+.footer-inner p {
+  margin: 0;
+  max-width: 640px;
+}
+.footer .brand {
+  font-size: 24px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 960px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: 40px;
+    gap: 40px;
+  }
+  .hero-trophy {
+    width: 84px;
+    right: 8px;
+    bottom: -36px;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .hall-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .champ-latest {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-inline: 16px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-inner {
+    justify-content: space-between;
+  }
+  .stage,
+  .feature,
+  .champ-latest {
+    padding: 28px;
+  }
+  .hall-grid {
+    grid-template-columns: 1fr;
+  }
+  .champ-latest {
+    grid-column: span 1;
+  }
+  .champ-latest .champ-facts {
+    grid-template-columns: 1fr;
+  }
+  .countdown {
+    gap: 8px;
+  }
+  .match-teams {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+  }
+  .team {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .live-dot { animation: none; }
+}

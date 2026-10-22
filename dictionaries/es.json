@@ -86,7 +86,28 @@
     "vs": "vs",
     "mvp": "MVP de la final",
     "host": "Sede",
-    "formerly": "Jugó como {name}"
+    "viewPlayers": "Ver jugadores",
+    "playersTitle": "Los jugadores que levantaron la copa",
+    "close": "Cerrar",
+    "currentTeam": "Equipo actual: {team}",
+    "currentUnknown": "Equipo actual: por confirmar",
+    "cupsWith": "Copas con",
+    "cupOne": "copa mundial",
+    "cupMany": "copas mundiales",
+    "substitute": "Suplente",
+    "inMemoriam": "En memoria",
+    "nowAs": "Actualmente como: {name}",
+    "roles": {
+      "top": "Top",
+      "jungle": "Jungla",
+      "mid": "Mid",
+      "adc": "ADC",
+      "support": "Soporte"
+    },
+    "status": {
+      "retired": "Retirado",
+      "freeAgent": "Agente libre"
+    }
   },
   "footer": {
     "disclaimer": "Worlds LoL es un proyecto de fans y no está afiliado a Riot Games. League of Legends y Worlds son marcas de Riot Games, Inc.",

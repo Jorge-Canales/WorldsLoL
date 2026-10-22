@@ -1,0 +1,402 @@
+[
+  {
+    "year": 2011,
+    "players": [
+      {
+        "name": "xPeke",
+        "role": "top"
+      },
+      {
+        "name": "Cyanide",
+        "role": "jungle"
+      },
+      {
+        "name": "Shushei",
+        "role": "mid"
+      },
+      {
+        "name": "LaMiaZeaLoT",
+        "role": "adc"
+      },
+      {
+        "name": "Mellisan",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2012,
+    "players": [
+      {
+        "name": "Stanley",
+        "role": "top"
+      },
+      {
+        "name": "Lilballz",
+        "role": "jungle"
+      },
+      {
+        "name": "Toyz",
+        "role": "mid"
+      },
+      {
+        "name": "BeBe",
+        "role": "adc"
+      },
+      {
+        "name": "MiSTakE",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2013,
+    "players": [
+      {
+        "name": "Impact",
+        "role": "top"
+      },
+      {
+        "name": "Bengi",
+        "role": "jungle"
+      },
+      {
+        "name": "Faker",
+        "role": "mid"
+      },
+      {
+        "name": "Piglet",
+        "role": "adc"
+      },
+      {
+        "name": "PoohManDu",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2014,
+    "players": [
+      {
+        "name": "Looper",
+        "role": "top"
+      },
+      {
+        "name": "DanDy",
+        "role": "jungle"
+      },
+      {
+        "name": "PawN",
+        "role": "mid"
+      },
+      {
+        "name": "imp",
+        "role": "adc"
+      },
+      {
+        "name": "Mata",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2015,
+    "players": [
+      {
+        "name": "MaRin",
+        "role": "top"
+      },
+      {
+        "name": "Bengi",
+        "role": "jungle"
+      },
+      {
+        "name": "Faker",
+        "role": "mid"
+      },
+      {
+        "name": "Easyhoon",
+        "role": "mid",
+        "sub": true
+      },
+      {
+        "name": "Bang",
+        "role": "adc"
+      },
+      {
+        "name": "Wolf",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2016,
+    "players": [
+      {
+        "name": "Duke",
+        "role": "top"
+      },
+      {
+        "name": "Bengi",
+        "role": "jungle"
+      },
+      {
+        "name": "Blank",
+        "role": "jungle",
+        "sub": true
+      },
+      {
+        "name": "Faker",
+        "role": "mid"
+      },
+      {
+        "name": "Bang",
+        "role": "adc"
+      },
+      {
+        "name": "Wolf",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2017,
+    "players": [
+      {
+        "name": "CuVee",
+        "role": "top"
+      },
+      {
+        "name": "Ambition",
+        "role": "jungle"
+      },
+      {
+        "name": "Haru",
+        "role": "jungle",
+        "sub": true
+      },
+      {
+        "name": "Crown",
+        "role": "mid"
+      },
+      {
+        "name": "Ruler",
+        "role": "adc"
+      },
+      {
+        "name": "CoreJJ",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2018,
+    "players": [
+      {
+        "name": "TheShy",
+        "role": "top"
+      },
+      {
+        "name": "Duke",
+        "role": "top",
+        "sub": true
+      },
+      {
+        "name": "Ning",
+        "role": "jungle"
+      },
+      {
+        "name": "Rookie",
+        "role": "mid"
+      },
+      {
+        "name": "JackeyLove",
+        "role": "adc"
+      },
+      {
+        "name": "Baolan",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2019,
+    "players": [
+      {
+        "name": "GimGoon",
+        "role": "top"
+      },
+      {
+        "name": "Tian",
+        "role": "jungle"
+      },
+      {
+        "name": "Doinb",
+        "role": "mid"
+      },
+      {
+        "name": "Lwx",
+        "role": "adc"
+      },
+      {
+        "name": "Crisp",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2020,
+    "players": [
+      {
+        "name": "Nuguri",
+        "role": "top"
+      },
+      {
+        "name": "Canyon",
+        "role": "jungle"
+      },
+      {
+        "name": "ShowMaker",
+        "role": "mid"
+      },
+      {
+        "name": "Ghost",
+        "role": "adc"
+      },
+      {
+        "name": "BeryL",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2021,
+    "players": [
+      {
+        "name": "Flandre",
+        "role": "top"
+      },
+      {
+        "name": "Jiejie",
+        "role": "jungle"
+      },
+      {
+        "name": "Scout",
+        "role": "mid"
+      },
+      {
+        "name": "Viper",
+        "role": "adc"
+      },
+      {
+        "name": "Meiko",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2022,
+    "players": [
+      {
+        "name": "Kingen",
+        "role": "top"
+      },
+      {
+        "name": "Pyosik",
+        "role": "jungle"
+      },
+      {
+        "name": "Juhan",
+        "role": "jungle",
+        "sub": true
+      },
+      {
+        "name": "Zeka",
+        "role": "mid"
+      },
+      {
+        "name": "Deft",
+        "role": "adc"
+      },
+      {
+        "name": "BeryL",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2023,
+    "players": [
+      {
+        "name": "Zeus",
+        "role": "top"
+      },
+      {
+        "name": "Oner",
+        "role": "jungle"
+      },
+      {
+        "name": "Faker",
+        "role": "mid"
+      },
+      {
+        "name": "Gumayusi",
+        "role": "adc"
+      },
+      {
+        "name": "Keria",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2024,
+    "players": [
+      {
+        "name": "Zeus",
+        "role": "top"
+      },
+      {
+        "name": "Oner",
+        "role": "jungle"
+      },
+      {
+        "name": "Faker",
+        "role": "mid"
+      },
+      {
+        "name": "Gumayusi",
+        "role": "adc"
+      },
+      {
+        "name": "Keria",
+        "role": "support"
+      }
+    ]
+  },
+  {
+    "year": 2025,
+    "players": [
+      {
+        "name": "Doran",
+        "role": "top"
+      },
+      {
+        "name": "Oner",
+        "role": "jungle"
+      },
+      {
+        "name": "Faker",
+        "role": "mid"
+      },
+      {
+        "name": "Gumayusi",
+        "role": "adc"
+      },
+      {
+        "name": "Keria",
+        "role": "support"
+      }
+    ]
+  }
+]

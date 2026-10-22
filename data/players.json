@@ -1,0 +1,192 @@
+{
+  "_note": "Equipo actual de cada jugador. Edita 'current' cuando alguien cambie de equipo; null muestra 'por confirmar'. Los equipos de los que ya hay dato corresponden al inicio de la temporada 2026 y hay que revisarlos.",
+  "players": {
+    "xPeke": {
+      "current": "retired"
+    },
+    "Cyanide": {
+      "current": "retired"
+    },
+    "Shushei": {
+      "current": "retired",
+      "deceased": true
+    },
+    "LaMiaZeaLoT": {
+      "current": "retired"
+    },
+    "Mellisan": {
+      "current": "retired"
+    },
+    "Stanley": {
+      "current": "retired"
+    },
+    "Lilballz": {
+      "current": "retired"
+    },
+    "Toyz": {
+      "current": "retired"
+    },
+    "BeBe": {
+      "current": "retired"
+    },
+    "MiSTakE": {
+      "current": "retired"
+    },
+    "Impact": {
+      "current": "FlyQuest"
+    },
+    "Bengi": {
+      "current": "retired"
+    },
+    "Faker": {
+      "current": "T1"
+    },
+    "Piglet": {
+      "current": "retired"
+    },
+    "PoohManDu": {
+      "current": "retired"
+    },
+    "Looper": {
+      "current": "retired"
+    },
+    "DanDy": {
+      "current": "retired"
+    },
+    "PawN": {
+      "current": "retired"
+    },
+    "imp": {
+      "current": "retired"
+    },
+    "Mata": {
+      "current": "retired"
+    },
+    "MaRin": {
+      "current": "retired"
+    },
+    "Easyhoon": {
+      "current": "retired"
+    },
+    "Bang": {
+      "current": "retired"
+    },
+    "Wolf": {
+      "current": "retired"
+    },
+    "Duke": {
+      "current": "retired"
+    },
+    "Blank": {
+      "current": "freeAgent"
+    },
+    "CuVee": {
+      "current": "retired"
+    },
+    "Ambition": {
+      "current": "retired"
+    },
+    "Crown": {
+      "current": "retired"
+    },
+    "Ruler": {
+      "current": "Gen.G"
+    },
+    "CoreJJ": {
+      "current": "Team Liquid"
+    },
+    "TheShy": {
+      "current": "Invictus Gaming"
+    },
+    "Ning": {
+      "current": "retired"
+    },
+    "Rookie": {
+      "current": "Invictus Gaming"
+    },
+    "JackeyLove": {
+      "current": "Top Esports"
+    },
+    "Baolan": {
+      "current": "retired"
+    },
+    "GimGoon": {
+      "current": "retired"
+    },
+    "Tian": {
+      "current": "Top Esports"
+    },
+    "Doinb": {
+      "current": "freeAgent"
+    },
+    "Lwx": {
+      "current": "retired"
+    },
+    "Crisp": {
+      "current": "LGD Gaming"
+    },
+    "Nuguri": {
+      "current": "retired"
+    },
+    "Canyon": {
+      "current": "Gen.G"
+    },
+    "ShowMaker": {
+      "current": "Dplus KIA"
+    },
+    "Ghost": {
+      "current": "retired"
+    },
+    "BeryL": {
+      "current": "freeAgent"
+    },
+    "Flandre": {
+      "current": "Bilibili Gaming"
+    },
+    "Jiejie": {
+      "current": "EDward Gaming"
+    },
+    "Scout": {
+      "current": "NS RedForce"
+    },
+    "Viper": {
+      "current": "Bilibili Gaming"
+    },
+    "Meiko": {
+      "current": "Invictus Gaming"
+    },
+    "Kingen": {
+      "current": "NS RedForce"
+    },
+    "Pyosik": {
+      "current": "DN SOOPers"
+    },
+    "Zeka": {
+      "current": "Hanwha Life Esports"
+    },
+    "Deft": {
+      "current": "freeAgent"
+    },
+    "Zeus": {
+      "current": "Hanwha Life Esports"
+    },
+    "Oner": {
+      "current": "T1"
+    },
+    "Gumayusi": {
+      "current": "Hanwha Life Esports"
+    },
+    "Keria": {
+      "current": "T1"
+    },
+    "Doran": {
+      "current": "T1"
+    },
+    "Haru": {
+      "current": "retired"
+    },
+    "Juhan": {
+      "current": "freeAgent"
+    }
+  }
+}

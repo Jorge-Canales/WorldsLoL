@@ -1,4 +1,6 @@
-import { fill, type Dict, type Locale } from "@/lib/i18n";
+import ChampionCard from "./ChampionCard";
+import type { Dict, Locale } from "@/lib/i18n";
+import { getRoster } from "@/lib/roster";
 import type { Champion } from "@/lib/types";
 
 const THEMES = ["purple", "green", "blue", "orange"] as const;
@@ -25,48 +27,18 @@ export default function HallOfFame({
       </div>
 
       <div className="hall-grid">
-        {sorted.map((c, i) => {
-          const theme = THEMES[i % THEMES.length];
-          const renamed = c.teamAtTime !== c.org;
-          return (
-            <article
-              key={c.year}
-              className={`feature feature-${theme} champ${i === 0 ? " champ-latest" : ""}`}
-            >
-              <p className="champ-year">{c.year}</p>
-              <p className="champ-label">{t.champion}</p>
-              <h3 className="h3 champ-name">{c.org}</h3>
-              {renamed && (
-                <p className="champ-sub">{fill(t.formerly, { name: c.teamAtTime })}</p>
-              )}
-
-              <dl className="champ-facts">
-                <div>
-                  <dt>{t.final}</dt>
-                  <dd>
-                    {c.score} {t.vs} {c.runnerUp}
-                  </dd>
-                </div>
-                <div>
-                  <dt>{t.host}</dt>
-                  <dd>
-                    {c.city}, {countries.of(c.countryCode) ?? c.countryCode}
-                  </dd>
-                </div>
-                {c.mvp && (
-                  <div>
-                    <dt>{t.mvp}</dt>
-                    <dd>{c.mvp}</dd>
-                  </div>
-                )}
-              </dl>
-
-              <span className="champ-region">
-                {regionsDict[c.region as keyof Dict["regions"]] ?? c.region}
-              </span>
-            </article>
-          );
-        })}
+        {sorted.map((c, i) => (
+          <ChampionCard
+            key={c.year}
+            champion={c}
+            theme={THEMES[i % THEMES.length]}
+            latest={i === 0}
+            t={t}
+            region={regionsDict[c.region as keyof Dict["regions"]] ?? c.region}
+            host={`${c.city}, ${countries.of(c.countryCode) ?? c.countryCode}`}
+            roster={getRoster(c.year, champions)}
+          />
+        ))}
       </div>
     </section>
   );

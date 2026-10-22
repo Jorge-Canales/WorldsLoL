@@ -19,9 +19,12 @@ export default function KnockoutStage({ lang, t }: Props) {
     fn: t?.final || (lang === "es" ? "Gran Final" : "Grand Final"),
   };
 
-  const renderMatch = (match: any) => {
+  const renderMatch = (match: any, isFinal = false) => {
     const isWinnerA = match.winner && match.winner === match.teamA;
     const isWinnerB = match.winner && match.winner === match.teamB;
+    // Verde para ganadores normales; dorado solo para el campeón en la Gran Final.
+    const winBg = isFinal ? "rgba(241, 196, 15, 0.2)" : "rgba(46, 204, 113, 0.15)";
+    const winColor = isFinal ? "#f1c40f" : "#2ecc71";
 
     return (
       <div
@@ -45,8 +48,8 @@ export default function KnockoutStage({ lang, t }: Props) {
             alignItems: "center",
             padding: "6px 8px",
             borderRadius: "4px",
-            background: isWinnerA ? "rgba(46, 204, 113, 0.15)" : "transparent",
-            color: isWinnerA ? "#2ecc71" : "#fff",
+            background: isWinnerA ? winBg : "transparent",
+            color: isWinnerA ? winColor : "#fff",
             fontWeight: isWinnerA ? "bold" : "normal",
           }}
         >
@@ -61,8 +64,8 @@ export default function KnockoutStage({ lang, t }: Props) {
             alignItems: "center",
             padding: "6px 8px",
             borderRadius: "4px",
-            background: isWinnerB ? "rgba(46, 204, 113, 0.15)" : "transparent",
-            color: isWinnerB ? "#2ecc71" : "#fff",
+            background: isWinnerB ? winBg : "transparent",
+            color: isWinnerB ? winColor : "#fff",
             fontWeight: isWinnerB ? "bold" : "normal",
           }}
         >
@@ -89,7 +92,7 @@ export default function KnockoutStage({ lang, t }: Props) {
           <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--muted)" }}>
             {titles.qf}
           </h4>
-          {bracket.quarterfinals.map(renderMatch)}
+          {bracket.quarterfinals.map((m) => renderMatch(m))}
         </div>
 
         {/* Semifinales */}
@@ -97,7 +100,7 @@ export default function KnockoutStage({ lang, t }: Props) {
           <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--muted)" }}>
             {titles.sf}
           </h4>
-          {bracket.semifinals.map(renderMatch)}
+          {bracket.semifinals.map((m) => renderMatch(m))}
         </div>
 
         {/* Gran Final */}
@@ -105,7 +108,7 @@ export default function KnockoutStage({ lang, t }: Props) {
           <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "#f1c40f" }}>
             {titles.fn}
           </h4>
-          {bracket.final.map(renderMatch)}
+          {bracket.final.map((m) => renderMatch(m, true))}
         </div>
       </div>
     </div>

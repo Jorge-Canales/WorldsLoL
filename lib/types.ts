@@ -80,8 +80,9 @@ export type BracketPlayIn = {
     day: number;
     matches: BracketPlayInMatch[];
   }[];
-  /** Equipo que pasa al Swiss, cuando ya terminó el Play-In. */
+  /** Equipo que pasa al Swiss, cuando ya terminó el Play-In (código y nombre completo). */
   qualified: string;
+  qualifiedName?: string;
 };
 
 export type BracketResponse = {

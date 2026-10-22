@@ -16,6 +16,9 @@ let lastGood: BracketResponse | null = null;
 
 /** Edición en curso: la más reciente que arranca en los próximos 14 días. */
 function currentEdition() {
+  // Para pruebas con otra edición (ej. 2025): "apiWindow" en worlds.config.json.
+  const win = (config as unknown as { apiWindow?: { start: string | null; end: string | null } | null }).apiWindow;
+  if (win?.start) return win;
   const soon = Date.now() + 14 * 86_400_000;
   const list = (config.editions as { start: string | null; end: string | null }[])
     .filter((e) => e.start && Date.parse(e.start) <= soon)

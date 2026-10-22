@@ -12,8 +12,8 @@ type Norm = {
   start: number;
   state: string;
   block: string;
-  a: { code: string; wins: number };
-  b: { code: string; wins: number };
+  a: { code: string; name: string; wins: number };
+  b: { code: string; name: string; wins: number };
 };
 
 const DASH = "—";
@@ -32,8 +32,8 @@ function normalize(events: ApiEvent[]): Norm[] {
       start: Date.parse(e.startTime),
       state: e.state ?? "unstarted",
       block: e.blockName ?? "",
-      a: { code: t[0].code ?? "TBD", wins: t[0].result?.gameWins ?? 0 },
-      b: { code: t[1].code ?? "TBD", wins: t[1].result?.gameWins ?? 0 },
+      a: { code: t[0].code ?? "TBD", name: t[0].name ?? t[0].code ?? "TBD", wins: t[0].result?.gameWins ?? 0 },
+      b: { code: t[1].code ?? "TBD", name: t[1].name ?? t[1].code ?? "TBD", wins: t[1].result?.gameWins ?? 0 },
     });
   }
   return out.sort((x, y) => x.start - y.start);
@@ -77,7 +77,14 @@ export function buildKnockout(events: ApiEvent[]) {
   const sf = ko.filter((m) => /semi/i.test(m.block));
   const fn = ko.filter((m) => /final/i.test(m.block) && !/quarter|semi|cuartos/i.test(m.block));
 
-  if (qf.length + sf.length + fn.length === 0) return null;
+  if (qf.length + sf.length + fn.length === 0) {
+    // Respaldo: la API a veces solo dice "Knockouts". Por orden de fecha: 4 cuartos, 2 semis, 1 final.
+    const all7 = ko.filter((m) => /knockout|bracket|playoff|elimination/i.test(m.block)).slice(0, 7);
+    if (all7.length === 0) return null;
+    qf.push(...all7.slice(0, 4));
+    sf.push(...all7.slice(4, 6));
+    fn.push(...all7.slice(6, 7));
+  }
 
   // Ordenar cuartos para que los dos que alimentan la misma semi queden juntos
   // (el horario no siempre sigue el orden del cuadro).
@@ -247,7 +254,12 @@ export function buildPlayIn(events: ApiEvent[]): BracketPlayIn | null {
 
   const q = slots.q;
   const qualified = q && q.status === "finished" ? q.winner : "";
-  return { bracket, rounds, qualified };
+  const names = new Map<string, string>();
+  for (const m of matches) {
+    names.set(m.a.code, m.a.name);
+    names.set(m.b.code, m.b.name);
+  }
+  return { bracket, rounds, qualified, qualifiedName: names.get(qualified) ?? qualified };
 }
 
 /** Nombres de bloque que devuelve la API (útil para depurar con ?debug). */

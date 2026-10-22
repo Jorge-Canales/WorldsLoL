@@ -52,8 +52,9 @@ export default function PlayInStage({ lang }: Props) {
     </div>
   );
 
-  const card = (m: BracketPlayInMatch) => {
-    const isQ = !!data.qualified && m.status === "finished";
+  const card = (m: BracketPlayInMatch, isFinal: boolean) => {
+    // Dorado solo en el partido de clasificación (la final del Play-In).
+    const isQ = isFinal && !!data.qualified && m.status === "finished";
     return (
       <div key={m.id}>
         {m.lower && (
@@ -114,14 +115,14 @@ export default function PlayInStage({ lang }: Props) {
         {columns.map((col) => (
           <div key={col.id} style={{ display: "flex", flexDirection: "column", gap: col.gap }}>
             <h4 style={col.id === "qual" ? { ...headStyle, color: "#f1c40f" } : headStyle}>{col.title}</h4>
-            {col.matches.map(card)}
+            {col.matches.map((m) => card(m, col.id === "qual"))}
           </div>
         ))}
       </div>
       {data.qualified && (
         <p className="muted" style={{ textAlign: "center", marginTop: "1rem" }}>
           {es ? "Clasificado al Swiss:" : "Qualified to Swiss:"}{" "}
-          <strong style={{ color: "#f1c40f" }}>{data.qualified}</strong>
+          <strong style={{ color: "#f1c40f" }}>{data.qualifiedName || data.qualified}</strong>
         </p>
       )}
     </div>

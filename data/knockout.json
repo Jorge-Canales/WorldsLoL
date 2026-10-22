@@ -1,0 +1,15 @@
+{
+  "quarterfinals": [
+    { "id": "qf1", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" },
+    { "id": "qf2", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" },
+    { "id": "qf3", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" },
+    { "id": "qf4", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" }
+  ],
+  "semifinals": [
+    { "id": "sf1", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" },
+    { "id": "sf2", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" }
+  ],
+  "final": [
+    { "id": "f1", "teamA": "—", "scoreA": 0, "teamB": "—", "scoreB": 0, "winner": "" }
+  ]
+}

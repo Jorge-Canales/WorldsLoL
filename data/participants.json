@@ -1,0 +1,98 @@
+[
+  {
+    "id": "al",
+    "name": "Anyone's Legend",
+    "shortName": "AL",
+    "file": "Anyones_Legendlogo_square.webp"
+  },
+  {
+    "id": "blg",
+    "name": "Bilibili Gaming",
+    "shortName": "BLG",
+    "file": "Bilibili_Gaminglogo_square.webp"
+  },
+  {
+    "id": "cfo",
+    "name": "CTBC Flying Oyster",
+    "shortName": "CFO",
+    "file": "CTBC_Flying_Oysterlogo_square.webp"
+  },
+  {
+    "id": "dk",
+    "name": "Dplus KIA",
+    "shortName": "DK",
+    "file": "Dplus_Kialogo_square.webp"
+  },
+  {
+    "id": "g2",
+    "name": "G2 Esports",
+    "shortName": "G2",
+    "file": "G2_Esportslogo_square.webp"
+  },
+  {
+    "id": "gen",
+    "name": "Gen.G",
+    "shortName": "GEN",
+    "file": "Gen.Glogo_square.webp"
+  },
+  {
+    "id": "hle",
+    "name": "Hanwha Life Esports",
+    "shortName": "HLE",
+    "file": "Hanwha_Life_Esportslogo_square.webp"
+  },
+  {
+    "id": "ig",
+    "name": "Invictus Gaming",
+    "shortName": "IG",
+    "file": "Invictus_Gaminglogo_square.webp"
+  },
+  {
+    "id": "kc",
+    "name": "Karmine Corp",
+    "shortName": "KC",
+    "file": "Karmine_Corplogo_square.webp"
+  },
+  {
+    "id": "los",
+    "name": "LØS",
+    "shortName": "LOS",
+    "file": "LOSlogo_square.webp"
+  },
+  {
+    "id": "lyon",
+    "name": "LYON",
+    "shortName": "LYON",
+    "file": "LYON_29logo_square.webp"
+  },
+  {
+    "id": "koi",
+    "name": "Movistar KOI",
+    "shortName": "KOI",
+    "file": "Movistar_KOIlogo_square.webp"
+  },
+  {
+    "id": "t1",
+    "name": "T1",
+    "shortName": "T1",
+    "file": "T1logo_square.webp"
+  },
+  {
+    "id": "tl",
+    "name": "Team Liquid",
+    "shortName": "TL",
+    "file": "Team_Liquidlogo_square.webp"
+  },
+  {
+    "id": "tsw",
+    "name": "Team Secret Whales",
+    "shortName": "TSW",
+    "file": "Team_Secret_Whaleslogo_square.webp"
+  },
+  {
+    "id": "tes",
+    "name": "Top Esports",
+    "shortName": "TES",
+    "file": "Top_Esportslogo_square.webp"
+  }
+]

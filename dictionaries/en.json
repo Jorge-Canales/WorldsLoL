@@ -78,6 +78,23 @@
     "EMEA": "EMEA · Europe",
     "GPL": "GPL · Taiwan & SEA"
   },
+  "participants": {
+    "title": "Competing Teams",
+    "subtitle": "The organizations ready to chase glory in this tournament."
+  },
+  "swiss": {
+    "title": "Swiss Stage",
+    "subtitle": "Round-by-round tracking of matchups.",
+    "round": "Round {n}"
+  },
+  "knockout": {
+    "title": "Knockout Stage",
+    "subtitle": "Brackets leading to the Worlds Grand Final.",
+    "quarterfinals": "Quarterfinals",
+    "semifinals": "Semifinals",
+    "final": "Grand Final",
+    "winner": "Champion"
+  },
   "hall": {
     "title": "Hall of fame",
     "subtitle": "Every champion, from 2011 to today.",

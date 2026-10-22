@@ -1,0 +1,64 @@
+[
+  {
+    "round": 1,
+    "title": "Ronda 1",
+    "matches": [
+      { "teamA": "GEN", "teamB": "IG", "winner": ""},
+      { "teamA": "HLE", "teamB": "TES", "winner": "" },
+      { "teamA": "BLG", "teamB": "MKOI", "winner": "" },
+      { "teamA": "AL", "teamB": "KC", "winner": "" },
+      { "teamA": "G2", "teamB": "DK", "winner": "" },
+      { "teamA": "TLAW", "teamB": "CFO", "winner": "" },
+      { "teamA": "LOS", "teamB": "T1", "winner": "" },
+      { "teamA": "TSW", "teamB": "LYON", "winner": "" }
+    ]
+  },
+  {
+    "round": 2,
+    "title": "Ronda 2",
+    "matches": [
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" },
+      { "teamA":"—", "teamB": "—" }
+    ]
+  },
+    {
+    "round": 3,
+    "title": "Ronda 3",
+    "matches": [
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" }
+    ]
+  },  {
+    "round": 4,
+    "title": "Ronda 4",
+    "matches": [
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" }
+    ]
+  },
+    {
+    "round": 5,
+    "title": "Ronda 5",
+    "matches": [
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" },
+      { "teamA":"—", "teamB": "—", "statusA": "-", "statusB": "-" }
+    ]
+  }
+]

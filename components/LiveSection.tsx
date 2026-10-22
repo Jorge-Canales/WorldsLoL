@@ -51,6 +51,11 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
   if (!isLive) return null;
 
   const timeFmt = new Intl.DateTimeFormat(lang, { timeStyle: "short" });
+  const startFmt = new Intl.DateTimeFormat(lang, {
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  });
   const badge = {
     live: t.badgeLive,
     upcoming: t.badgeUpcoming,
@@ -83,11 +88,18 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
                   {m.status === "live" && m.gameMinute !== null && (
                     <span className="muted">{fill(t.minute, { n: m.gameMinute })}</span>
                   )}
+                  {m.status === "upcoming" && (
+                    <span className="muted">
+                      {fill(t.startsAt, { time: startFmt.format(new Date(m.startTime)) })}
+                    </span>
+                  )}
                 </div>
                 <div className="match-teams">
                   <span className="team">{m.teams[0].name}</span>
                   <span className="score">
-                    {m.teams[0].score} – {m.teams[1].score}
+                    {m.status === "upcoming"
+                      ? t.vs
+                      : `${m.teams[0].score} – ${m.teams[1].score}`}
                   </span>
                   <span className="team team-right">{m.teams[1].name}</span>
                 </div>

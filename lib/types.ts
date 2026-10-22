@@ -40,3 +40,48 @@ export type LiveResponse = {
   updatedAt: string;
   matches: LiveMatch[];
 };
+
+/** Contrato de /api/bracket: mismas formas que data/knockout.json y data/swiss.json. */
+export type BracketKnockoutMatch = {
+  id: string;
+  teamA: string;
+  scoreA: number;
+  teamB: string;
+  scoreB: number;
+  winner: string;
+};
+
+export type BracketSwissRound = {
+  round: number;
+  title: string;
+  matches: {
+    teamA: string;
+    teamB: string;
+    winner: string;
+    statusA?: "qualified" | "eliminated";
+    statusB?: "qualified" | "eliminated";
+  }[];
+};
+
+export type BracketPlayIn = {
+  rounds: {
+    title: string | null; // null = la API no separa rondas; se muestra "Día N"
+    day: number;
+    matches: (BracketKnockoutMatch & { status: "upcoming" | "live" | "finished" })[];
+  }[];
+  /** Equipo que pasa al Swiss, cuando ya terminó todo el Play-In. */
+  qualified: string;
+};
+
+export type BracketResponse = {
+  status: "ok" | "stale";
+  updatedAt: string;
+  /** null = la API aún no publica esa fase; el front usa el JSON estático. */
+  knockout: {
+    quarterfinals: BracketKnockoutMatch[];
+    semifinals: BracketKnockoutMatch[];
+    final: BracketKnockoutMatch[];
+  } | null;
+  swiss: BracketSwissRound[] | null;
+  playIn: BracketPlayIn | null;
+};

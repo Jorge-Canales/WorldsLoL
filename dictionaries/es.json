@@ -78,6 +78,23 @@
     "EMEA": "EMEA · Europa",
     "GPL": "GPL · Taiwán y SEA"
   },
+  "participants": {
+    "title": "Equipos en competencia",
+    "subtitle": "Las organizaciones listas para la gloria en este torneo."
+  },
+  "swiss": {
+    "title": "Fase Suiza",
+    "subtitle": "Seguimiento de enfrentamientos ronda por ronda.",
+    "round": "Ronda {n}"
+  },
+  "knockout": {
+    "title": "Fase Eliminatoria",
+    "subtitle": "Llaves finales hacia la Gran Final de Worlds.",
+    "quarterfinals": "Cuartos de final",
+    "semifinals": "Semifinales",
+    "final": "Gran Final",
+    "winner": "Campeón"
+  },
   "hall": {
     "title": "Salón de la fama",
     "subtitle": "Todos los campeones, de 2011 a hoy.",

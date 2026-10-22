@@ -1,5 +1,6 @@
 import { fetchAllEvents } from "@/lib/lolesports";
-import { buildKnockout, buildPlayIn, buildSwiss, listBlocks } from "@/lib/bracket";
+import { buildKnockout, buildPlayIn, buildSwiss, filterEdition, listBlocks } from "@/lib/bracket";
+import config from "@/data/worlds.config.json";
 import type { BracketResponse } from "@/lib/types";
 
 /**
@@ -13,16 +14,29 @@ import type { BracketResponse } from "@/lib/types";
 
 let lastGood: BracketResponse | null = null;
 
+/** Edición en curso: la más reciente que arranca en los próximos 14 días. */
+function currentEdition() {
+  const soon = Date.now() + 14 * 86_400_000;
+  const list = (config.editions as { start: string | null; end: string | null }[])
+    .filter((e) => e.start && Date.parse(e.start) <= soon)
+    .sort((a, b) => Date.parse(b.start!) - Date.parse(a.start!));
+  return list[0] ?? null;
+}
+
 export async function GET(request: Request) {
   const debug = new URL(request.url).searchParams.has("debug");
   let body: BracketResponse;
   let ok = true;
   let error: string | null = null;
   let blocks: string[] = [];
+  let counts: unknown = null;
 
   try {
-    const events = await fetchAllEvents();
+    const raw = await fetchAllEvents();
+    const edition = currentEdition();
+    const events = filterEdition(raw, edition);
     blocks = listBlocks(events);
+    counts = { fetched: raw.length, inEdition: events.length, edition };
     body = {
       status: "ok",
       updatedAt: new Date().toISOString(),
@@ -40,7 +54,7 @@ export async function GET(request: Request) {
       : { status: "stale", updatedAt: new Date().toISOString(), knockout: null, swiss: null, playIn: null };
   }
 
-  return Response.json(debug ? { ...body, debug: { error, blocks } } : body, {
+  return Response.json(debug ? { ...body, debug: { error, blocks, counts } } : body, {
     headers: {
       "Cache-Control": ok
         ? "public, s-maxage=30, stale-while-revalidate=60"

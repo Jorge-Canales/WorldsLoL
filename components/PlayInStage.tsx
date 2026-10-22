@@ -2,10 +2,18 @@
 
 import playInData from "@/data/playin.json";
 import type { Locale } from "@/lib/i18n";
-import type { BracketPlayIn } from "@/lib/types";
+import type { BracketPlayIn, BracketPlayInMatch } from "@/lib/types";
 import { useBracket } from "@/lib/useBracket";
 
 type Props = { lang: Locale };
+
+const headStyle = {
+  textAlign: "center" as const,
+  fontSize: "0.85rem",
+  textTransform: "uppercase" as const,
+  letterSpacing: "1px",
+  color: "var(--muted)",
+};
 
 export default function PlayInStage({ lang }: Props) {
   // Datos en vivo de /api/bracket; si no hay, se usa data/playin.json (vacío).
@@ -13,7 +21,8 @@ export default function PlayInStage({ lang }: Props) {
   const data = (live?.playIn ?? playInData) as BracketPlayIn;
   const es = lang === "es";
 
-  if (!data.rounds || data.rounds.length === 0) {
+  const empty = !data.bracket && (!data.rounds || data.rounds.length === 0);
+  if (empty) {
     return (
       <div className="panel" style={{ padding: "1.5rem", textAlign: "center" }}>
         <p className="muted">
@@ -43,50 +52,76 @@ export default function PlayInStage({ lang }: Props) {
     </div>
   );
 
+  const card = (m: BracketPlayInMatch) => {
+    const isQ = !!data.qualified && m.status === "finished";
+    return (
+      <div key={m.id}>
+        {m.lower && (
+          <div className="muted" style={{ fontSize: "0.7rem", textAlign: "center", marginBottom: "4px" }}>
+            {es ? "Bracket de perdedores" : "Losers' bracket"}
+          </div>
+        )}
+        <div
+          className="panel"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "4px",
+            padding: "0.5rem",
+            background: "rgba(0, 0, 0, 0.25)",
+            border: m.status === "live" ? "1px solid #e74c3c" : "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: "6px",
+          }}
+        >
+          {m.status === "live" && (
+            <span style={{ fontSize: "0.65rem", color: "#e74c3c", fontWeight: "bold", textAlign: "center" }}>
+              {es ? "EN VIVO" : "LIVE"}
+            </span>
+          )}
+          {row(m.teamA, m.scoreA, !!m.winner && m.winner === m.teamA, isQ && data.qualified === m.teamA)}
+          {row(m.teamB, m.scoreB, !!m.winner && m.winner === m.teamB, isQ && data.qualified === m.teamB)}
+        </div>
+      </div>
+    );
+  };
+
+  const titles: Record<string, string> = {
+    r1: es ? "Ronda 1" : "Round 1",
+    r2: es ? "Ronda 2" : "Round 2",
+    qual: es ? "Partido de clasificación" : "Qualification match",
+  };
+
+  const columns = data.bracket
+    ? data.bracket.map((c) => ({ id: c.key, title: titles[c.key], matches: c.matches, gap: c.key === "r1" ? "1rem" : "2.5rem" }))
+    : data.rounds.map((r) => ({
+        id: String(r.day),
+        title: r.title ?? (es ? `Día ${r.day}` : `Day ${r.day}`),
+        matches: r.matches,
+        gap: "1rem",
+      }));
+
   return (
     <div style={{ margin: "2rem 0", overflowX: "auto" }}>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${data.rounds.length}, minmax(200px, 1fr))`,
+          gridTemplateColumns: `repeat(${columns.length}, minmax(200px, 1fr))`,
           gap: "1.5rem",
-          minWidth: `${data.rounds.length * 220}px`,
+          alignItems: "center",
+          minWidth: `${columns.length * 220}px`,
         }}
       >
-        {data.rounds.map((round) => (
-          <div key={round.day} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--muted)" }}>
-              {round.title ?? (es ? `Día ${round.day}` : `Day ${round.day}`)}
-            </h4>
-            {round.matches.map((m) => (
-              <div
-                key={m.id}
-                className="panel"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "4px",
-                  padding: "0.5rem",
-                  background: "rgba(0, 0, 0, 0.25)",
-                  border: m.status === "live" ? "1px solid #e74c3c" : "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: "6px",
-                }}
-              >
-                {m.status === "live" && (
-                  <span style={{ fontSize: "0.65rem", color: "#e74c3c", fontWeight: "bold", textAlign: "center" }}>
-                    {es ? "EN VIVO" : "LIVE"}
-                  </span>
-                )}
-                {row(m.teamA, m.scoreA, !!m.winner && m.winner === m.teamA, !!data.qualified && data.qualified === m.teamA && m.status === "finished")}
-                {row(m.teamB, m.scoreB, !!m.winner && m.winner === m.teamB, !!data.qualified && data.qualified === m.teamB && m.status === "finished")}
-              </div>
-            ))}
+        {columns.map((col) => (
+          <div key={col.id} style={{ display: "flex", flexDirection: "column", gap: col.gap }}>
+            <h4 style={col.id === "qual" ? { ...headStyle, color: "#f1c40f" } : headStyle}>{col.title}</h4>
+            {col.matches.map(card)}
           </div>
         ))}
       </div>
       {data.qualified && (
         <p className="muted" style={{ textAlign: "center", marginTop: "1rem" }}>
-          {es ? "Clasificado al Swiss:" : "Qualified to Swiss:"} <strong style={{ color: "#f1c40f" }}>{data.qualified}</strong>
+          {es ? "Clasificado al Swiss:" : "Qualified to Swiss:"}{" "}
+          <strong style={{ color: "#f1c40f" }}>{data.qualified}</strong>
         </p>
       )}
     </div>

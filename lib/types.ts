@@ -63,13 +63,24 @@ export type BracketSwissRound = {
   }[];
 };
 
+export type BracketPlayInMatch = BracketKnockoutMatch & {
+  status: "upcoming" | "live" | "finished";
+  /** true = partido de la llave de perdedores */
+  lower?: boolean;
+};
+
 export type BracketPlayIn = {
+  /** Cuadro de doble eliminación (3 columnas). null si los partidos no encajan. */
+  bracket:
+    | { key: "r1" | "r2" | "qual"; matches: BracketPlayInMatch[] }[]
+    | null;
+  /** Respaldo en lista, agrupado por bloque/día, por si el cuadro no encaja. */
   rounds: {
-    title: string | null; // null = la API no separa rondas; se muestra "Día N"
+    title: string | null; // null = se muestra "Día N"
     day: number;
-    matches: (BracketKnockoutMatch & { status: "upcoming" | "live" | "finished" })[];
+    matches: BracketPlayInMatch[];
   }[];
-  /** Equipo que pasa al Swiss, cuando ya terminó todo el Play-In. */
+  /** Equipo que pasa al Swiss, cuando ya terminó el Play-In. */
   qualified: string;
 };
 

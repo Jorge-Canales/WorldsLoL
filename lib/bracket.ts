@@ -1,5 +1,5 @@
 import type { ApiEvent } from "@/lib/lolesports";
-import type { BracketKnockoutMatch, BracketPlayIn, BracketSwissRound } from "@/lib/types";
+import type { BracketKnockoutMatch, BracketPlayIn, BracketPlayInMatch, BracketSwissRound } from "@/lib/types";
 
 /**
  * Convierte los eventos crudos de lolesports en las MISMAS formas que ya
@@ -153,39 +153,101 @@ export function buildSwiss(events: ApiEvent[]): BracketSwissRound[] | null {
 }
 
 /**
- * Play-In: no asumimos la forma del cuadro (doble eliminación, grupos...).
- * Agrupamos por bloque de la API; si todo viene en un solo bloque, por día.
- * El ganador del último partido terminado se marca como clasificado al Swiss.
+ * La API mezcla ediciones de varios años. Dejamos solo los partidos de la
+ * edición en curso (start/end de worlds.config.json), con 1 día de margen.
+ */
+export function filterEdition(
+  events: ApiEvent[],
+  edition: { start: string | null; end: string | null } | null,
+): ApiEvent[] {
+  if (!edition?.start) return events;
+  const DAY = 86_400_000;
+  const from = Date.parse(edition.start) - DAY;
+  const to = edition.end ? Date.parse(edition.end) + DAY : Infinity;
+  return events.filter((e) => {
+    const t = e.startTime ? Date.parse(e.startTime) : NaN;
+    return Number.isFinite(t) && t >= from && t <= to;
+  });
+}
+
+const statusOf = (m: Norm): BracketPlayInMatch["status"] =>
+  m.state === "inProgress" ? "live" : m.state === "completed" ? "finished" : "upcoming";
+
+const blankPi = (id: string, lower = false): BracketPlayInMatch => ({
+  ...blank(id),
+  status: "upcoming",
+  lower,
+});
+
+/**
+ * Play-In 2026: 4 equipos, doble eliminación, gana 1 (pasa al Swiss).
+ * Cada partido se ubica en el cuadro por el récord (G-P) de los dos equipos
+ * antes de jugarlo, así no dependemos de cómo Riot nombre las rondas:
+ *   0-0 vs 0-0 → Ronda 1 | 0-1 vs 0-1 → Ronda 1 (perdedores)
+ *   1-0 vs 1-0 → Ronda 2 | 1-1 vs 1-1 → Ronda 2 (perdedores)
+ *   2-0 vs 2-1 → Partido de clasificación
+ * Si algún partido no encaja, se devuelve solo la lista de respaldo.
  */
 export function buildPlayIn(events: ApiEvent[]): BracketPlayIn | null {
   const matches = normalize(events).filter((m) => PLAYIN_RE.test(m.block));
   if (matches.length === 0) return null;
 
+  // ---- Cuadro por récord ----
+  const rec = new Map<string, { w: number; l: number }>();
+  const get = (c: string) => rec.get(c) ?? { w: 0, l: 0 };
+  const slots: Record<string, BracketPlayInMatch | undefined> = {};
+  let unmapped = 0;
+
+  for (const m of matches) {
+    if (isTbd(m.a.code) || isTbd(m.b.code)) continue;
+    const a = get(m.a.code);
+    const b = get(m.b.code);
+    const key = [`${a.w}-${a.l}`, `${b.w}-${b.l}`].sort().join("|");
+    const slot =
+      key === "0-0|0-0" ? (slots.u1 ? "u2" : "u1")
+      : key === "0-1|0-1" ? "l1"
+      : key === "1-0|1-0" ? "uf"
+      : key === "1-1|1-1" ? "lf"
+      : key === "2-0|2-1" ? "q"
+      : null;
+    if (!slot || slots[slot]) {
+      unmapped++;
+      continue;
+    }
+    slots[slot] = { ...toKo(m, `pi-${slot}`), status: statusOf(m), lower: slot === "l1" || slot === "lf" };
+    if (m.state === "completed" && m.a.wins !== m.b.wins) {
+      const win = winnerOf(m);
+      const lose = win === m.a.code ? m.b.code : m.a.code;
+      rec.set(win, { ...get(win), w: get(win).w + 1 });
+      rec.set(lose, { ...get(lose), l: get(lose).l + 1 });
+    }
+  }
+
+  const mapped = Object.keys(slots).length;
+  const bracket =
+    unmapped === 0 && mapped > 0
+      ? [
+          { key: "r1" as const, matches: [slots.u1 ?? blankPi("pi-u1"), slots.u2 ?? blankPi("pi-u2"), slots.l1 ?? blankPi("pi-l1", true)] },
+          { key: "r2" as const, matches: [slots.uf ?? blankPi("pi-uf"), slots.lf ?? blankPi("pi-lf", true)] },
+          { key: "qual" as const, matches: [slots.q ?? blankPi("pi-q")] },
+        ]
+      : null;
+
+  // ---- Respaldo en lista: por bloque, o por día si todo viene en un bloque ----
   const blocks = [...new Set(matches.map((m) => m.block))];
   const byDay = blocks.length === 1;
   const keyOf = (m: Norm) => (byDay ? new Date(m.start).toISOString().slice(0, 10) : m.block);
-
   const groups = new Map<string, Norm[]>();
-  for (const m of matches) {
-    const k = keyOf(m);
-    groups.set(k, [...(groups.get(k) ?? []), m]);
-  }
-
-  const rounds = [...groups.entries()].map(([key, list], i) => ({
-    title: byDay ? null : key,
+  for (const m of matches) groups.set(keyOf(m), [...(groups.get(keyOf(m)) ?? []), m]);
+  const rounds = [...groups.entries()].map(([k, list], i) => ({
+    title: byDay ? null : k,
     day: i + 1,
-    matches: list.map((m, j) => ({
-      ...toKo(m, `pi${i + 1}-${j + 1}`),
-      status: (m.state === "inProgress" ? "live" : m.state === "completed" ? "finished" : "upcoming") as
-        | "live"
-        | "finished"
-        | "upcoming",
-    })),
+    matches: list.map((m, j) => ({ ...toKo(m, `pi${i + 1}-${j + 1}`), status: statusOf(m) })),
   }));
 
-  const last = matches[matches.length - 1];
-  const allDone = matches.every((m) => m.state === "completed");
-  return { rounds, qualified: allDone ? winnerOf(last) : "" };
+  const q = slots.q;
+  const qualified = q && q.status === "finished" ? q.winner : "";
+  return { bracket, rounds, qualified };
 }
 
 /** Nombres de bloque que devuelve la API (útil para depurar con ?debug). */

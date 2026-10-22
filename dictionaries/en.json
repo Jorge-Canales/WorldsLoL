@@ -61,6 +61,8 @@
     "badgeUpcoming": "Upcoming",
     "badgeFinished": "Final",
     "minute": "Min {n}",
+    "startsAt": "Starts {time}",
+    "vs": "vs",
     "bestOf": "Best of {n}",
     "updated": "Updated {time}"
   },

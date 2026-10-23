@@ -1,6 +1,7 @@
 {
   "_note": "Edita este archivo cuando Riot confirme fechas nuevas. Las horas van en UTC (la Z al final). 'end' es el fin aproximado de la final: la final de 2026 es el 14 de noviembre en Brooklyn; se dejó hasta las 06:00 UTC del 15 para cubrir toda la noche. Cuando 'start' sea null, el sitio muestra 'fecha por confirmar'.",
   "celebrationDays": 7,
+  "apiWindow": { "start": "2025-10-13T00:00:00Z", "end": "2025-11-10T12:00:00Z" },
   "phasesControl": {
         "playInActive": true,
         "swissActive": false,

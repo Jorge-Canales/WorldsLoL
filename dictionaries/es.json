@@ -60,7 +60,7 @@
     "empty": "No hay partidos en este momento.",
     "badgeLive": "En vivo",
     "badgeUpcoming": "Próximo",
-    "badgeFinished": "Final",
+    "badgeFinished": "Finalizado",
     "minute": "Min {n}",
     "startsAt": "Empieza {time}",
     "vs": "vs",
@@ -68,7 +68,21 @@
     "updated": "Actualizado {time}",
     "nextMatch": "Próximo partido",
     "startsIn": "Empieza en {time}",
-    "startingNow": "Está por comenzar"
+    "startingNow": "Está por comenzar",
+    "units": {
+      "day": "{n} d",
+      "hour": "{n} h",
+      "minute": "{n} min",
+      "second": "{n} s"
+    },
+    "game": "Juego {n}",
+    "kills": "Kills",
+    "towers": "Torres",
+    "dragons": "Dragones",
+    "barons": "Barones",
+    "inhibitors": "Inhibidores",
+    "paused": "En pausa",
+    "delayNote": "Las estadísticas del juego van con aproximadamente 1 minuto de retraso."
   },
   "stats": {
     "title": "Los números del trono",

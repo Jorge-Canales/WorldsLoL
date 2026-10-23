@@ -22,6 +22,26 @@ export type Edition = {
  * Contrato de la API /api/live. El front solo depende de esta forma,
  * así la fuente de datos se puede cambiar sin tocar la interfaz.
  */
+/** Estadísticas de un equipo en el juego en curso (feed livestats de lolesports). */
+export type LiveGameTeam = {
+  kills: number;
+  towers: number;
+  /** Tipos de dragón que lleva (por ejemplo ["infernal", "ocean"]); la cuenta es la longitud. */
+  dragons: string[];
+  barons: number;
+  inhibitors: number;
+};
+
+export type LiveGame = {
+  /** Número de juego dentro de la serie (1, 2, 3…) */
+  number: number;
+  /** Minuto de juego (aproximado: los datos llegan con ~1 min de retraso) */
+  minute: number | null;
+  paused: boolean;
+  /** Mismo orden que LiveMatch.teams */
+  teams: [LiveGameTeam, LiveGameTeam];
+};
+
 export type LiveMatch = {
   id: string;
   stage: string;
@@ -29,6 +49,8 @@ export type LiveMatch = {
   status: "upcoming" | "live" | "finished";
   startTime: string; // ISO
   gameMinute: number | null; // minuto del juego en curso, si la fuente lo da
+  /** Estadísticas del juego en curso (kills y objetivos). Ausente si la fuente no las dio. */
+  game?: LiveGame | null;
   teams: [
     { name: string; code: string; score: number },
     { name: string; code: string; score: number },

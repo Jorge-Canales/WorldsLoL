@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "title": "Worlds LoL — 리그 오브 레전드 월드 챔피언십 역대 우승팀",
+    "description": "역대 모든 월드 챔피언십 우승팀을 만나는 명예의 전당. 대회 카운트다운과 실시간 스코어를 함께 제공합니다."
+  },
+  "nav": {
+    "live": "라이브",
+    "stats": "기록",
+    "hall": "명예의 전당",
+    "switchLabel": "EN",
+    "switchAria": "Switch to English",
+    "languageLabel": "언어"
+  },
+  "hero": {
+    "loading": "Worlds LoL",
+    "countdown": {
+      "eyebrow": "다음 월드 챔피언십",
+      "headline": "Worlds {year}까지 카운트다운",
+      "body": "지구 최강의 팀들, 단 하나의 우승컵. 역대 모든 챔피언의 역사가 여기에 있고, 대회가 시작되면 실시간 스코어도 확인할 수 있어요.",
+      "cardTitle": "Worlds {year} 시작까지",
+      "startsOn": "{date} 시작"
+    },
+    "live": {
+      "eyebrow": "대회 진행 중",
+      "headline": "Worlds {year}, 지금 진행 중",
+      "body": "우승컵의 주인이 가려지는 날들입니다. 여기에서 대회 스코어를 확인하고, 역사상 가장 멀리 올라간 팀을 살펴보세요.",
+      "cardTitle": "Worlds {year} 결승",
+      "finalOn": "{date} · {city}"
+    },
+    "celebration": {
+      "eyebrow": "Worlds {year} 우승",
+      "headline": "새로운 우승컵의 주인공이 탄생했습니다",
+      "body": "대회가 끝났습니다. 이 페이지는 이미 다음 Worlds를 향한 카운트다운을 시작했어요.",
+      "cardTitle": "{year} 우승팀",
+      "pending": "우승팀을 확인하는 중…",
+      "beat": "{team}을(를) 꺾었습니다 ({score})"
+    },
+    "tbd": {
+      "eyebrow": "다음 월드 챔피언십",
+      "headline": "Worlds {year}: 일정 미정",
+      "body": "라이엇이 아직 일정을 발표하지 않았습니다. 발표되는 즉시 카운트다운이 자동으로 시작됩니다.",
+      "cardTitle": "Worlds {year}",
+      "cardBody": "일정 미정"
+    },
+    "ctaHall": "명예의 전당 보기",
+    "ctaLive": "라이브 스코어 보기",
+    "ctaStats": "기록 보기"
+  },
+  "countdown": {
+    "days": "일",
+    "hours": "시간",
+    "minutes": "분",
+    "seconds": "초"
+  },
+  "live": {
+    "title": "실시간 스코어",
+    "subtitle": "30초마다 자동으로 새로고침됩니다.",
+    "pending": "스코어를 불러오는 중…",
+    "stale": "가장 최근에 받은 데이터를 표시합니다. 데이터 소스의 응답이 느렸습니다.",
+    "empty": "현재 진행 중인 경기가 없습니다.",
+    "badgeLive": "LIVE",
+    "badgeUpcoming": "예정",
+    "badgeFinished": "종료",
+    "minute": "{n}분",
+    "startsAt": "{time} 시작",
+    "vs": "vs",
+    "bestOf": "Bo{n}",
+    "updated": "{time} 업데이트",
+    "nextMatch": "다음 경기",
+    "startsIn": "{time} 후 시작",
+    "startingNow": "곧 시작합니다",
+    "units": {
+      "day": "{n}일",
+      "hour": "{n}시간",
+      "minute": "{n}분",
+      "second": "{n}초"
+    },
+    "game": "{n}게임",
+    "kills": "킬",
+    "towers": "타워",
+    "dragons": "드래곤",
+    "barons": "바론",
+    "inhibitors": "억제기",
+    "paused": "일시정지",
+    "delayNote": "경기 통계는 약 1분 지연됩니다."
+  },
+  "stats": {
+    "title": "왕좌 뒤에 숨은 숫자들",
+    "subtitle": "누가 가장 많이 우승했고, 어느 지역 출신일까요?",
+    "byRegion": "지역별 우승 횟수",
+    "byTeam": "최다 우승 구단",
+    "titleOne": "회",
+    "titleMany": "회"
+  },
+  "regions": {
+    "LCK": "LCK · 한국",
+    "LPL": "LPL · 중국",
+    "EMEA": "EMEA · 유럽",
+    "GPL": "GPL · 대만·동남아"
+  },
+  "participants": {
+    "title": "참가 팀",
+    "subtitle": "이번 대회에서 우승에 도전하는 팀들입니다."
+  },
+  "swiss": {
+    "title": "스위스 스테이지",
+    "subtitle": "라운드별 대진을 확인하세요.",
+    "round": "{n}라운드"
+  },
+  "knockout": {
+    "title": "녹아웃 스테이지",
+    "subtitle": "월드 챔피언십 결승으로 향하는 토너먼트 대진표.",
+    "quarterfinals": "8강",
+    "semifinals": "4강",
+    "final": "결승",
+    "winner": "우승"
+  },
+  "phases": {
+    "switchAria": "스테이지 전환",
+    "maintenanceTitle": "점검 중",
+    "maintenanceBody": "설정에서 여러 스테이지가 동시에 활성화되어 있습니다.",
+    "tabs": {
+      "playIn": "플레이-인",
+      "swiss": "스위스",
+      "knockout": "녹아웃"
+    }
+  },
+  "playIn": {
+    "title": "플레이-인 스테이지",
+    "subtitle": "스위스 스테이지 마지막 진출권을 두고 팀들이 경쟁합니다.",
+    "loading": "플레이-인을 불러오는 중…",
+    "empty": "아직 공개된 플레이-인 경기가 없습니다.",
+    "round1": "1라운드",
+    "round2": "2라운드",
+    "qualification": "진출 결정전",
+    "day": "{n}일차",
+    "losers": "패자조",
+    "live": "LIVE",
+    "qualified": "스위스 진출:"
+  },
+  "hall": {
+    "title": "명예의 전당",
+    "subtitle": "2011년부터 현재까지 모든 우승팀.",
+    "champion": "우승",
+    "final": "결승",
+    "vs": "vs",
+    "mvp": "결승 MVP",
+    "host": "개최지",
+    "viewPlayers": "선수 보기",
+    "playersTitle": "우승컵을 들어 올린 선수들",
+    "close": "닫기",
+    "currentTeam": "현재 소속: {team}",
+    "currentUnknown": "현재 소속: 확인 중",
+    "cupsWith": "우승 소속팀",
+    "cupOne": "회 우승",
+    "cupMany": "회 우승",
+    "substitute": "교체 선수",
+    "inMemoriam": "고인을 추모하며",
+    "nowAs": "현재 팀명: {name}",
+    "roles": {
+      "top": "탑",
+      "jungle": "정글",
+      "mid": "미드",
+      "adc": "원딜",
+      "support": "서포터"
+    },
+    "status": {
+      "retired": "은퇴",
+      "freeAgent": "자유계약(FA)"
+    }
+  },
+  "footer": {
+    "disclaimer": "Worlds LoL은 팬이 만든 프로젝트이며 라이엇 게임즈와 관련이 없습니다. League of Legends와 Worlds는 Riot Games, Inc.의 상표입니다.",
+    "data": "과거 기록: Wikipedia. 일정 및 스코어: LoL Esports."
+  }
+}

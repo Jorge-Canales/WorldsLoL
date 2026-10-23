@@ -1,5 +1,5 @@
 import type { LiveMatch, LiveResponse } from "@/lib/types";
-import { fetchCurrentEvents, type ApiEvent, type ApiTeam } from "@/lib/lolesports";
+import { fetchCurrentEvents, fetchLiveGame, type ApiEvent, type ApiTeam } from "@/lib/lolesports";
 
 /**
  * FASE 3: marcadores reales del Worlds.
@@ -70,8 +70,45 @@ function pickMatches(events: ApiEvent[], now: number): LiveMatch[] {
   return [...live, ...upcoming, ...finished];
 }
 
-async function loadMatches(): Promise<LiveMatch[]> {
-  return pickMatches(await fetchCurrentEvents(), Date.now());
+/** Espera como máximo `ms`; si se pasa, sigue sin esperar (los marcadores salen igual). */
+function withTimeout<T>(p: Promise<T>, ms: number): Promise<T | undefined> {
+  return Promise.race([p, new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), ms))]);
+}
+
+/**
+ * Agrega minuto, kills y objetivos a los partidos en vivo (máximo 3).
+ * Es un extra: si algo falla, el partido se muestra igual, solo con el marcador.
+ */
+async function addGameStats(matches: LiveMatch[], notes: string[]) {
+  const live = matches.filter((m) => m.status === "live").slice(0, 3);
+  await Promise.allSettled(
+    live.map(async (m) => {
+      try {
+        const info = await fetchLiveGame(m.id);
+        if (!info) {
+          notes.push(`${m.id}: sin juego en curso o sin datos`);
+          return;
+        }
+        m.gameMinute = info.minute;
+        const [a, b] = m.teams;
+        const sa = info.byCode[a.code];
+        const sb = info.byCode[b.code];
+        if (!sa || !sb) {
+          notes.push(`${m.id}: las siglas ${a.code}/${b.code} no coinciden con ${Object.keys(info.byCode).join("/")}`);
+          return;
+        }
+        m.game = { number: info.number, minute: info.minute, paused: info.paused, teams: [sa, sb] };
+      } catch (err) {
+        notes.push(`${m.id}: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }),
+  );
+}
+
+async function loadMatches(notes: string[]): Promise<LiveMatch[]> {
+  const matches = pickMatches(await fetchCurrentEvents(), Date.now());
+  await withTimeout(addGameStats(matches, notes), 7000);
+  return matches;
 }
 
 // Último dato bueno, por si la fuente tarda o falla.
@@ -82,9 +119,10 @@ export async function GET(request: Request) {
   let body: LiveResponse;
   let error: string | null = null;
   let ok = true;
+  const notes: string[] = [];
 
   try {
-    const matches = await loadMatches();
+    const matches = await loadMatches(notes);
     body = { status: "ok", updatedAt: new Date().toISOString(), matches };
     lastGood = body;
   } catch (err) {
@@ -96,7 +134,7 @@ export async function GET(request: Request) {
       : { status: "stale", updatedAt: new Date().toISOString(), matches: [] };
   }
 
-  return Response.json(debug ? { ...body, debug: error } : body, {
+  return Response.json(debug ? { ...body, debug: error, statsDebug: notes } : body, {
     headers: {
       "Cache-Control": ok
         ? "public, s-maxage=15, stale-while-revalidate=30"

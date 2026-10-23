@@ -60,7 +60,7 @@
     "empty": "No matches right now.",
     "badgeLive": "Live",
     "badgeUpcoming": "Upcoming",
-    "badgeFinished": "Final",
+    "badgeFinished": "Finished",
     "minute": "Min {n}",
     "startsAt": "Starts {time}",
     "vs": "vs",
@@ -68,7 +68,21 @@
     "updated": "Updated {time}",
     "nextMatch": "Next match",
     "startsIn": "Starts in {time}",
-    "startingNow": "About to start"
+    "startingNow": "About to start",
+    "units": {
+      "day": "{n} d",
+      "hour": "{n} h",
+      "minute": "{n} min",
+      "second": "{n} s"
+    },
+    "game": "Game {n}",
+    "kills": "Kills",
+    "towers": "Towers",
+    "dragons": "Dragons",
+    "barons": "Barons",
+    "inhibitors": "Inhibitors",
+    "paused": "Paused",
+    "delayNote": "Game stats are about 1 minute behind."
   },
   "stats": {
     "title": "The numbers behind the throne",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import LiveGameStats from "./LiveGameStats";
 import TeamLogo from "./TeamLogo";
 import { fill, type Dict, type Locale } from "@/lib/i18n";
 import { getPhase } from "@/lib/phase";
@@ -17,16 +18,16 @@ type Props = {
 
 const POLL_MS = 30_000;
 
-/** "2 d 3 h", "4 h 12 min", "7 min 30 s": abreviaturas que valen igual en español e inglés. */
-function formatIn(ms: number) {
+/** "2 d 3 h", "4 h 12 min", "7 min 30 s": las abreviaturas salen del diccionario de cada idioma. */
+function formatIn(ms: number, u: Dict["live"]["units"]) {
   const total = Math.max(0, Math.floor(ms / 1000));
   const d = Math.floor(total / 86_400);
   const h = Math.floor((total % 86_400) / 3_600);
   const m = Math.floor((total % 3_600) / 60);
   const s = total % 60;
-  if (d > 0) return `${d} d ${h} h`;
-  if (h > 0) return `${h} h ${m} min`;
-  return `${m} min ${s} s`;
+  if (d > 0) return `${fill(u.day, { n: d })} ${fill(u.hour, { n: h })}`;
+  if (h > 0) return `${fill(u.hour, { n: h })} ${fill(u.minute, { n: m })}`;
+  return `${fill(u.minute, { n: m })} ${fill(u.second, { n: s })}`;
 }
 
 /** Tarjeta con cuenta regresiva al siguiente partido (cuando no hay ninguno en vivo). */
@@ -52,7 +53,7 @@ function NextMatch({ match, t }: { match: LiveMatch; t: Dict["live"] }) {
         <TeamLogo code={b.code} name={b.name} size={32} />
       </div>
       <p className="stage-note" style={{ margin: 0 }}>
-        {ms > 0 ? fill(t.startsIn, { time: formatIn(ms) }) : t.startingNow}
+        {ms > 0 ? fill(t.startsIn, { time: formatIn(ms, t.units) }) : t.startingNow}
       </p>
     </div>
   );
@@ -166,6 +167,7 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
                     <TeamLogo code={m.teams[1].code} name={m.teams[1].name} size={28} />
                   </span>
                 </div>
+                {m.status === "live" && m.game && <LiveGameStats game={m.game} t={t} />}
               </li>
             ))}
           </ul>

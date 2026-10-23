@@ -1,60 +1,47 @@
 # Worlds LoL
 
-Salón de la fama de los campeones de Worlds de League of Legends, con contador y marcadores en vivo. Bilingüe (ES/EN).
+**Todos los campeones del mundial de League of Legends, con marcadores en vivo.**
 
-> Proyecto de fans, no afiliado a Riot Games.
+🔗 **Míralo en acción: [worldslol.vercel.app](https://worldslol.vercel.app)**
 
-## Cómo verlo en tu computadora
+> Proyecto de fans, sin fines de lucro y no afiliado a Riot Games. League of Legends y Worlds son marcas de Riot Games, Inc.; los logos pertenecen a sus respectivas organizaciones.
 
-1. Descomprime el zip y abre una terminal **dentro de la carpeta** (en Windows: abre la carpeta, haz clic en la barra de dirección, escribe `cmd` y presiona Enter).
-2. Instala las dependencias (solo la primera vez, tarda un minuto):
-   ```
-   npm install
-   ```
-3. Arranca el sitio:
-   ```
-   npm run dev
-   ```
-4. Abre http://localhost:3000 en el navegador. Cada vez que guardes un archivo, la página se actualiza sola. Para detenerlo: `Ctrl + C`.
+## ¿Qué es?
 
-## Cómo publicarlo
+Worlds LoL es una página web dedicada al campeonato mundial de League of Legends. Reúne en un solo lugar la historia de todos los campeones desde 2011 y sigue el torneo en curso: cuánto falta para que empiece, qué partidos se juegan y cómo avanzan las llaves.
 
-1. Sube el contenido de esta carpeta a tu repo de GitHub (**sin** `node_modules` ni `.next`; el `.gitignore` ya los excluye).
-2. En vercel.com entra con GitHub → **Add New → Project** → elige tu repo → **Deploy**. No hay que cambiar ninguna opción: Vercel detecta Next.js solo.
-3. En **Settings → Domains** puedes poner el nombre `worldslol.vercel.app`.
-4. Desde ahí, cada vez que subas cambios a `main`, Vercel republica el sitio automáticamente.
+Está disponible en **español, inglés y coreano**.
 
-## Qué hay en cada carpeta
+## ¿Qué hace?
 
-| Ruta | Para qué sirve |
-|---|---|
-| `data/champions.json` | Todos los campeones 2011–2025. Cada año se agrega una fila nueva |
-| `data/worlds.config.json` | Fechas de cada Worlds. **Es lo que controla el contador y los estados** |
-| `dictionaries/es.json`, `en.json` | Todos los textos del sitio en cada idioma |
-| `app/[lang]/page.tsx` | La página principal (arma las secciones) |
-| `app/globals.css` | Estilos, basados en `DESIGN.md` |
-| `app/api/live/route.ts` | API de marcadores en vivo (por ahora devuelve "pendiente") |
-| `components/` | Piezas de la página: hero, contador, estadísticas, salón de la fama |
-| `lib/phase.ts` | La lógica que decide si toca cuenta regresiva, en vivo o celebración |
+- 🏆 **Salón de la fama.** Todos los campeones de 2011 a 2025, con su final, sede y MVP. Al abrir la tarjeta de un campeón se ven los jugadores que levantaron la copa: su posición, cuántos mundiales ha ganado cada uno, con qué equipos y dónde juega hoy.
+- 📊 **Los números del trono.** Títulos por región y por organización.
+- ⏱️ **Contador y estados automáticos.** La página cambia sola según la fecha del torneo: cuenta regresiva, en vivo, celebración del campeón o fecha por confirmar.
+- 🔴 **Marcadores en vivo.** Partidos en juego, próximos y recién terminados, con los logos de los equipos y la cuenta regresiva al siguiente partido. En los partidos en curso se ven además el minuto, las kills y los objetivos de cada equipo.
+- 🗂️ **Llaves del torneo.** Play-In, Fase Suiza y Eliminatoria, que se arman solas con los resultados.
+- 🌐 **Tres idiomas** con un selector que te deja en la misma página al cambiar.
 
-## Los estados del sitio
+## Datos
 
-El sitio cambia solo según la fecha, sin tocar código:
+Los datos históricos provienen de Wikipedia. El calendario, los marcadores y las estadísticas de partido provienen de LoL Esports, y pueden llegar con algunos segundos o minutos de retraso respecto a la transmisión oficial.
 
-| Estado | Cuándo | Qué se ve |
-|---|---|---|
-| Cuenta regresiva | Antes de que empiece el Worlds | Contador hacia el primer partido |
-| En vivo | Durante el torneo | Tarjeta verde, tiempo restante y sección de marcadores |
-| Celebración | 7 días después de la final | Campeón del año |
-| Por confirmar | Si la siguiente edición no tiene fecha | Aviso de "fecha por confirmar" |
+## Hecho con
 
-## Tareas del año
+Next.js, React y TypeScript, publicado en Vercel.
 
-**Cuando Riot anuncie las fechas del Worlds 2027:** edita `data/worlds.config.json` y cambia `start`, `end`, `finalCity` y `finalDate` del bloque de 2027. Las horas van en UTC (con la `Z` al final). Si falta la hora exacta, pon una aproximada; después se afina.
+## Roadmap
 
-**Cuando termine Worlds 2026:** agrega una fila al final de `data/champions.json` con los datos de la final (sigue el formato de las filas anteriores).
+**En camino**
+- Estadísticas de partido en vivo más precisas: minuto de juego y objetivos afinados con partidos reales.
+- Salón de la fama en su propia página, para dejar la portada más ligera.
+- Sección de equipos clasificados con el roster actual de cada uno, destacando a los jugadores que ya son campeones del mundo y con qué equipo lo lograron.
 
-## Pendiente (siguientes fases)
+**Después**
+- Indicador del estado de los datos (en vivo o de respaldo).
+- Fase del torneo detectada automáticamente.
+- Vista previa al compartir la página en redes sociales.
+- Animaciones, quiz y tarjetas para compartir.
 
-- Fase 3: conectar `app/api/live/route.ts` a la fuente de datos para marcador y minuto de juego.
-- Fase 5: animaciones, quiz y tarjetas para compartir.
+---
+
+© Jorge Canales. Todos los derechos reservados.

@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import configData from "@/data/worlds.config.json";
 import SwissStage from "./SwissStage";
 import KnockoutStage from "./KnockoutStage";
@@ -13,6 +16,14 @@ type Props = {
   tKnockout?: Dict["knockout"];
 };
 
+type Phase = "playIn" | "swiss" | "knockout";
+
+const LABELS: Record<Phase, { es: string; en: string }> = {
+  playIn: { es: "Play-In", en: "Play-In" },
+  swiss: { es: "Suiza", en: "Swiss" },
+  knockout: { es: "Eliminatoria", en: "Knockout" },
+};
+
 export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) {
   const control = config.phasesControl || {
     playInActive: false,
@@ -22,6 +33,11 @@ export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) 
 
   const { playInActive, swissActive, knockoutActive } = control;
   const activeCount = [playInActive, swissActive, knockoutActive].filter(Boolean).length;
+
+  // Fase "oficial" según la config; los botones permiten ver las otras.
+  const current: Phase = swissActive ? "swiss" : knockoutActive ? "knockout" : "playIn";
+  const [viewed, setViewed] = useState<Phase | null>(null);
+  const view: Phase = viewed ?? current;
 
   if (activeCount > 1) {
     return (
@@ -38,31 +54,62 @@ export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) 
 
   // Resolvemos la prop de swiss ya sea por tSwiss o por t general
   const resolvedSwissDict = tSwiss || t;
+  const es = lang === "es";
 
-  const title = swissActive
-    ? resolvedSwissDict?.title || (lang === "es" ? "Fase Suiza" : "Swiss Stage")
-    : knockoutActive
-    ? tKnockout?.title || (lang === "es" ? "Fase Eliminatoria" : "Knockout Stage")
-    : lang === "es" ? "Fase Play-In" : "Play-In Stage";
+  const title =
+    view === "swiss"
+      ? resolvedSwissDict?.title || (es ? "Fase Suiza" : "Swiss Stage")
+      : view === "knockout"
+      ? tKnockout?.title || (es ? "Fase Eliminatoria" : "Knockout Stage")
+      : es ? "Fase Play-In" : "Play-In Stage";
 
-  const subtitle = swissActive
-    ? resolvedSwissDict?.subtitle || (lang === "es" ? "Seguimiento de enfrentamientos ronda por ronda." : "Round-by-round tracking of matchups.")
-    : knockoutActive
-    ? tKnockout?.subtitle || (lang === "es" ? "Llaves finales hacia la Gran Final de Worlds." : "Brackets leading to the Worlds Grand Final.")
-    : lang === "es"
-    ? "Los equipos pelean por el último lugar en la Fase Suiza."
-    : "Teams fight for the last spot in the Swiss Stage.";
+  const subtitle =
+    view === "swiss"
+      ? resolvedSwissDict?.subtitle || (es ? "Seguimiento de enfrentamientos ronda por ronda." : "Round-by-round tracking of matchups.")
+      : view === "knockout"
+      ? tKnockout?.subtitle || (es ? "Llaves finales hacia la Gran Final de Worlds." : "Brackets leading to the Worlds Grand Final.")
+      : es
+      ? "Los equipos pelean por el último lugar en la Fase Suiza."
+      : "Teams fight for the last spot in the Swiss Stage.";
+
+  // Los dos botones son las fases distintas a la que se está viendo.
+  const others = (["playIn", "swiss", "knockout"] as Phase[]).filter((p) => p !== view);
 
   return (
     <section className="section container">
-      <div className="section-head" style={{ marginBottom: "1.5rem" }}>
-        <h2 className="h2">{title}</h2>
-        <p className="muted">{subtitle}</p>
+      <div
+        className="section-head"
+        style={{
+          marginBottom: "1.5rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        <div>
+          <h2 className="h2">{title}</h2>
+          <p className="muted">{subtitle}</p>
+        </div>
+        <div style={{ display: "flex", gap: "0.5rem" }} role="group" aria-label={es ? "Cambiar de fase" : "Switch stage"}>
+          {others.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className="btn btn-ghost"
+              style={{ textTransform: "uppercase", letterSpacing: "1px", fontSize: "0.8rem", cursor: "pointer" }}
+              onClick={() => setViewed(p === current ? null : p)}
+            >
+              {LABELS[p][lang]}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {swissActive && <SwissStage lang={lang} t={resolvedSwissDict} />}
-      {knockoutActive && <KnockoutStage lang={lang} t={tKnockout} />}
-      {playInActive && <PlayInStage lang={lang} />}
+      {view === "swiss" && <SwissStage lang={lang} t={resolvedSwissDict} />}
+      {view === "knockout" && <KnockoutStage lang={lang} t={tKnockout} />}
+      {view === "playIn" && <PlayInStage lang={lang} />}
     </section>
   );
 }

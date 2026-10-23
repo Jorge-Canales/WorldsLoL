@@ -44,8 +44,12 @@ export default function SwissStage({ lang, t }: Props) {
                 const styleA = getTeamStyle(match.teamA, match.statusA);
                 const styleB = getTeamStyle(match.teamB, match.statusB);
 
+                // Más espacio cuando cambia el grupo de récord (2-0 / 1-1 / 0-2…).
+                const prev = idx > 0 ? round.matches[idx - 1] : null;
+                const newGroup = !!prev && !!match.record && prev.record !== match.record;
+
                 return (
-                  <div key={idx} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px", background: "rgba(0,0,0,0.2)", padding: "4px", borderRadius: "4px" }}>
+                  <div key={idx} style={{ marginTop: newGroup ? "1.1rem" : 0, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px", background: "rgba(0,0,0,0.2)", padding: "4px", borderRadius: "4px" }}>
                     <div style={{ padding: "6px", textAlign: "center", fontWeight: "bold", fontSize: "0.85rem", borderRadius: "4px", background: styleA.bg, color: styleA.color }}>
                       {match.teamA || "—"}
                     </div>

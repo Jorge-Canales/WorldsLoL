@@ -58,6 +58,8 @@ export type BracketSwissRound = {
     teamA: string;
     teamB: string;
     winner: string;
+    /** Récord G-P de los equipos antes del partido ("1-0", "1-1"…). Separa los grupos de la ronda. */
+    record?: string;
     statusA?: "qualified" | "eliminated";
     statusB?: "qualified" | "eliminated";
   }[];

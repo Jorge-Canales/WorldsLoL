@@ -104,6 +104,14 @@ export function buildKnockout(events: ApiEvent[]) {
 
 /** Tamaño de cada ronda suiza (16 equipos): 8, 8, 8, 6, 3. */
 const SWISS_SIZES = [8, 8, 8, 6, 3];
+/** Grupos por récord en cada ronda, de mejor a peor, con su cantidad de partidos. */
+const SWISS_GROUPS: [string, number][][] = [
+  [["0-0", 8]],
+  [["1-0", 4], ["0-1", 4]],
+  [["2-0", 2], ["1-1", 4], ["0-2", 2]],
+  [["2-1", 3], ["1-2", 3]],
+  [["2-2", 3]],
+];
 const SWISS_WINS = 3; // 3 victorias clasifica, 3 derrotas elimina
 
 export function buildSwiss(events: ApiEvent[]): BracketSwissRound[] | null {
@@ -133,6 +141,7 @@ export function buildSwiss(events: ApiEvent[]): BracketSwissRound[] | null {
       teamA: m.a.code,
       teamB: m.b.code,
       winner,
+      record: `${wins.get(m.a.code) ?? 0}-${losses.get(m.a.code) ?? 0}`,
     };
 
     if (winner) {
@@ -151,11 +160,19 @@ export function buildSwiss(events: ApiEvent[]): BracketSwissRound[] | null {
     round.matches.push(entry);
   }
 
-  // Rellenar con "—" lo que aún no se define, igual que el JSON estático.
+  // Ordenar por grupo de récord (mejor primero) y rellenar con "—" lo que aún no se define.
   return rounds.map((r, i) => {
-    const matchesPadded = [...r.matches];
-    while (matchesPadded.length < SWISS_SIZES[i]) matchesPadded.push({ teamA: DASH, teamB: DASH, winner: "" });
-    return { ...r, matches: matchesPadded };
+    const layout = SWISS_GROUPS[i];
+    const known = new Set(layout.map(([rec]) => rec));
+    const ordered: BracketSwissRound["matches"] = [];
+    for (const [rec, size] of layout) {
+      const inGroup = r.matches.filter((m) => m.record === rec);
+      while (inGroup.length < size) inGroup.push({ teamA: DASH, teamB: DASH, winner: "", record: rec });
+      ordered.push(...inGroup);
+    }
+    // Partidos con un récord inesperado: al final, sin perderlos.
+    ordered.push(...r.matches.filter((m) => !known.has(m.record ?? "")));
+    return { ...r, matches: ordered };
   });
 }
 

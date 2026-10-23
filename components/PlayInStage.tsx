@@ -1,35 +1,34 @@
 "use client";
 
 import playInData from "@/data/playin.json";
-import type { Locale } from "@/lib/i18n";
-import type { BracketPlayIn, BracketPlayInMatch } from "@/lib/types";
-import { useBracket } from "@/lib/useBracket";
+import TeamLogo from "./TeamLogo";
+import { dictionaries, fill, type Locale } from "@/lib/i18n";
+import type { BracketPlayIn, BracketPlayInMatch, BracketResponse } from "@/lib/types";
 
-type Props = { lang: Locale };
+type Props = {
+  lang: Locale;
+  /** Datos de /api/bracket que le pasa TournamentPhases. null = aún cargando. */
+  data?: BracketResponse | null;
+};
 
 const headStyle = {
   textAlign: "center" as const,
   fontSize: "0.85rem",
   textTransform: "uppercase" as const,
   letterSpacing: "1px",
-  color: "var(--muted)",
+  color: "var(--color-fog)",
 };
 
-export default function PlayInStage({ lang }: Props) {
-  // Datos en vivo de /api/bracket; si no hay, se usa data/playin.json (vacío).
-  const live = useBracket();
+export default function PlayInStage({ lang, data: live }: Props) {
+  const t = dictionaries[lang].playIn;
+  // Datos en vivo; si no hay, se usa data/playin.json (vacío).
   const data = (live?.playIn ?? playInData) as BracketPlayIn;
-  const es = lang === "es";
 
   const empty = !data.bracket && (!data.rounds || data.rounds.length === 0);
   if (empty) {
     return (
       <div className="panel" style={{ padding: "1.5rem", textAlign: "center" }}>
-        <p className="muted">
-          {live
-            ? es ? "El Play-In aún no tiene partidos publicados." : "No Play-In matches published yet."
-            : es ? "Cargando Play-In…" : "Loading Play-In…"}
-        </p>
+        <p className="muted">{live ? t.empty : t.loading}</p>
       </div>
     );
   }
@@ -47,7 +46,10 @@ export default function PlayInStage({ lang }: Props) {
         fontWeight: won ? "bold" : "normal",
       }}
     >
-      <span style={{ fontSize: "0.85rem" }}>{team || "—"}</span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: "0.85rem" }}>
+        <TeamLogo code={team} size={20} />
+        {team || "—"}
+      </span>
       <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>{score}</span>
     </div>
   );
@@ -59,7 +61,7 @@ export default function PlayInStage({ lang }: Props) {
       <div key={m.id}>
         {m.lower && (
           <div className="muted" style={{ fontSize: "0.7rem", textAlign: "center", marginBottom: "4px" }}>
-            {es ? "Bracket de perdedores" : "Losers' bracket"}
+            {t.losers}
           </div>
         )}
         <div
@@ -76,7 +78,7 @@ export default function PlayInStage({ lang }: Props) {
         >
           {m.status === "live" && (
             <span style={{ fontSize: "0.65rem", color: "#e74c3c", fontWeight: "bold", textAlign: "center" }}>
-              {es ? "EN VIVO" : "LIVE"}
+              {t.live}
             </span>
           )}
           {row(m.teamA, m.scoreA, !!m.winner && m.winner === m.teamA, isQ && data.qualified === m.teamA)}
@@ -87,16 +89,16 @@ export default function PlayInStage({ lang }: Props) {
   };
 
   const titles: Record<string, string> = {
-    r1: es ? "Ronda 1" : "Round 1",
-    r2: es ? "Ronda 2" : "Round 2",
-    qual: es ? "Partido de clasificación" : "Qualification match",
+    r1: t.round1,
+    r2: t.round2,
+    qual: t.qualification,
   };
 
   const columns = data.bracket
     ? data.bracket.map((c) => ({ id: c.key, title: titles[c.key], matches: c.matches, gap: c.key === "r1" ? "1rem" : "2.5rem" }))
     : data.rounds.map((r) => ({
         id: String(r.day),
-        title: r.title ?? (es ? `Día ${r.day}` : `Day ${r.day}`),
+        title: r.title ?? fill(t.day, { n: r.day }),
         matches: r.matches,
         gap: "1rem",
       }));
@@ -121,7 +123,7 @@ export default function PlayInStage({ lang }: Props) {
       </div>
       {data.qualified && (
         <p className="muted" style={{ textAlign: "center", marginTop: "1rem" }}>
-          {es ? "Clasificado al Swiss:" : "Qualified to Swiss:"}{" "}
+          {t.qualified}{" "}
           <strong style={{ color: "#f1c40f" }}>{data.qualifiedName || data.qualified}</strong>
         </p>
       )}

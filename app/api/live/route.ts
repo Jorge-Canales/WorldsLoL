@@ -53,10 +53,15 @@ function pickMatches(events: ApiEvent[], now: number): LiveMatch[] {
   const at = (m: LiveMatch) => Date.parse(m.startTime);
 
   const live = all.filter((m) => m.status === "live").sort((a, b) => at(a) - at(b));
-  const upcoming = all
-    .filter((m) => m.status === "upcoming" && at(m) <= now + UPCOMING_WINDOW)
-    .sort((a, b) => at(a) - at(b))
-    .slice(0, MAX_UPCOMING);
+  const allUpcoming = all.filter((m) => m.status === "upcoming").sort((a, b) => at(a) - at(b));
+  let upcoming = allUpcoming.filter((m) => at(m) <= now + UPCOMING_WINDOW).slice(0, MAX_UPCOMING);
+  if (upcoming.length === 0) {
+    // Nada próximo en las siguientes 36 h: se manda igual el siguiente partido con equipos
+    // ya definidos, para poder mostrar la cuenta regresiva.
+    const known = (m: LiveMatch) => m.teams.every((t) => t.code !== "TBD");
+    const nearest = allUpcoming.find(known);
+    if (nearest) upcoming = [nearest];
+  }
   const finished = all
     .filter((m) => m.status === "finished" && at(m) >= now - FINISHED_WINDOW)
     .sort((a, b) => at(b) - at(a))

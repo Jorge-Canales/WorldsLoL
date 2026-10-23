@@ -8,7 +8,8 @@
     "stats": "Numbers",
     "hall": "Hall of fame",
     "switchLabel": "ES",
-    "switchAria": "Cambiar a español"
+    "switchAria": "Cambiar a español",
+    "languageLabel": "Language"
   },
   "hero": {
     "loading": "Worlds LoL",
@@ -54,7 +55,7 @@
   "live": {
     "title": "Live scores",
     "subtitle": "Refreshes on its own every 30 seconds.",
-    "pending": "Automatic tracking gets connected in the next phase. In the meantime, follow the official broadcast at lolesports.com.",
+    "pending": "Loading scores…",
     "stale": "Showing the latest available data; the source was slow to respond.",
     "empty": "No matches right now.",
     "badgeLive": "Live",
@@ -64,7 +65,10 @@
     "startsAt": "Starts {time}",
     "vs": "vs",
     "bestOf": "Best of {n}",
-    "updated": "Updated {time}"
+    "updated": "Updated {time}",
+    "nextMatch": "Next match",
+    "startsIn": "Starts in {time}",
+    "startingNow": "About to start"
   },
   "stats": {
     "title": "The numbers behind the throne",
@@ -96,6 +100,29 @@
     "semifinals": "Semifinals",
     "final": "Grand Final",
     "winner": "Champion"
+  },
+  "phases": {
+    "switchAria": "Switch stage",
+    "maintenanceTitle": "Under Maintenance",
+    "maintenanceBody": "Multiple stages are active at the same time in the configuration.",
+    "tabs": {
+      "playIn": "Play-In",
+      "swiss": "Swiss",
+      "knockout": "Knockout"
+    }
+  },
+  "playIn": {
+    "title": "Play-In Stage",
+    "subtitle": "Teams fight for the last spot in the Swiss Stage.",
+    "loading": "Loading Play-In…",
+    "empty": "No Play-In matches published yet.",
+    "round1": "Round 1",
+    "round2": "Round 2",
+    "qualification": "Qualification match",
+    "day": "Day {n}",
+    "losers": "Losers' bracket",
+    "live": "LIVE",
+    "qualified": "Qualified to Swiss:"
   },
   "hall": {
     "title": "Hall of fame",

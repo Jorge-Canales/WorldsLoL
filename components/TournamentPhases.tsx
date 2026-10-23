@@ -5,32 +5,34 @@ import configData from "@/data/worlds.config.json";
 import SwissStage from "./SwissStage";
 import KnockoutStage from "./KnockoutStage";
 import PlayInStage from "./PlayInStage";
-import type { Dict, Locale } from "@/lib/i18n";
+import { dictionaries, type Dict, type Locale } from "@/lib/i18n";
+import { useBracket } from "@/lib/useBracket";
 
 const config = configData as any;
 
 type Props = {
   lang: Locale;
-  t?: Dict["swiss"];         // Para compatibilidad general si se pasa 't'
+  t?: Dict["swiss"]; // compatibilidad: si se pasa 't', se usa como diccionario de la fase suiza
   tSwiss?: Dict["swiss"];
   tKnockout?: Dict["knockout"];
 };
 
 type Phase = "playIn" | "swiss" | "knockout";
 
-const LABELS: Record<Phase, { es: string; en: string }> = {
-  playIn: { es: "Play-In", en: "Play-In" },
-  swiss: { es: "Suiza", en: "Swiss" },
-  knockout: { es: "Eliminatoria", en: "Knockout" },
-};
-
 export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) {
+  const d = dictionaries[lang];
+  const swissDict = tSwiss ?? t ?? d.swiss;
+  const knockoutDict = tKnockout ?? d.knockout;
+
+  // Se piden las llaves UNA sola vez y se reparten a las tres fases:
+  // al cambiar de pestaña ya no hay parpadeo ni consultas repetidas.
+  const bracket = useBracket();
+
   const control = config.phasesControl || {
     playInActive: false,
     swissActive: false,
     knockoutActive: true,
   };
-
   const { playInActive, swissActive, knockoutActive } = control;
   const activeCount = [playInActive, swissActive, knockoutActive].filter(Boolean).length;
 
@@ -43,8 +45,10 @@ export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) 
     return (
       <section className="section container" style={{ textAlign: "center", padding: "3rem 0" }}>
         <div className="panel" style={{ padding: "2rem", background: "rgba(231, 76, 60, 0.1)", border: "1px solid #e74c3c" }}>
-          <h3 className="h3" style={{ color: "#e74c3c", marginBottom: "0.5rem" }}>Sistema en Mantenimiento</h3>
-          <p className="muted">Hay múltiples fases activas simultáneamente en la configuración.</p>
+          <h3 className="h3" style={{ color: "#e74c3c", marginBottom: "0.5rem" }}>
+            {d.phases.maintenanceTitle}
+          </h3>
+          <p className="muted">{d.phases.maintenanceBody}</p>
         </div>
       </section>
     );
@@ -52,25 +56,10 @@ export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) 
 
   if (activeCount === 0) return null;
 
-  // Resolvemos la prop de swiss ya sea por tSwiss o por t general
-  const resolvedSwissDict = tSwiss || t;
-  const es = lang === "es";
-
   const title =
-    view === "swiss"
-      ? resolvedSwissDict?.title || (es ? "Fase Suiza" : "Swiss Stage")
-      : view === "knockout"
-      ? tKnockout?.title || (es ? "Fase Eliminatoria" : "Knockout Stage")
-      : es ? "Fase Play-In" : "Play-In Stage";
-
+    view === "swiss" ? swissDict.title : view === "knockout" ? knockoutDict.title : d.playIn.title;
   const subtitle =
-    view === "swiss"
-      ? resolvedSwissDict?.subtitle || (es ? "Seguimiento de enfrentamientos ronda por ronda." : "Round-by-round tracking of matchups.")
-      : view === "knockout"
-      ? tKnockout?.subtitle || (es ? "Llaves finales hacia la Gran Final de Worlds." : "Brackets leading to the Worlds Grand Final.")
-      : es
-      ? "Los equipos pelean por el último lugar en la Fase Suiza."
-      : "Teams fight for the last spot in the Swiss Stage.";
+    view === "swiss" ? swissDict.subtitle : view === "knockout" ? knockoutDict.subtitle : d.playIn.subtitle;
 
   // Los dos botones son las fases distintas a la que se está viendo.
   const others = (["playIn", "swiss", "knockout"] as Phase[]).filter((p) => p !== view);
@@ -92,7 +81,7 @@ export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) 
           <h2 className="h2">{title}</h2>
           <p className="muted">{subtitle}</p>
         </div>
-        <div style={{ display: "flex", gap: "0.5rem" }} role="group" aria-label={es ? "Cambiar de fase" : "Switch stage"}>
+        <div style={{ display: "flex", gap: "0.5rem" }} role="group" aria-label={d.phases.switchAria}>
           {others.map((p) => (
             <button
               key={p}
@@ -101,15 +90,15 @@ export default function TournamentPhases({ lang, t, tSwiss, tKnockout }: Props) 
               style={{ textTransform: "uppercase", letterSpacing: "1px", fontSize: "0.8rem", cursor: "pointer" }}
               onClick={() => setViewed(p === current ? null : p)}
             >
-              {LABELS[p][lang]}
+              {d.phases.tabs[p]}
             </button>
           ))}
         </div>
       </div>
 
-      {view === "swiss" && <SwissStage lang={lang} t={resolvedSwissDict} />}
-      {view === "knockout" && <KnockoutStage lang={lang} t={tKnockout} />}
-      {view === "playIn" && <PlayInStage lang={lang} />}
+      {view === "swiss" && <SwissStage lang={lang} t={swissDict} data={bracket} />}
+      {view === "knockout" && <KnockoutStage lang={lang} t={knockoutDict} data={bracket} />}
+      {view === "playIn" && <PlayInStage lang={lang} data={bracket} />}
     </section>
   );
 }

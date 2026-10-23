@@ -2,17 +2,19 @@
 
 import swissData from "@/data/swiss.json";
 import { fill, type Dict, type Locale } from "@/lib/i18n";
-import { useBracket } from "@/lib/useBracket";
+import TeamLogo from "./TeamLogo";
+import type { BracketResponse } from "@/lib/types";
 
 type Props = {
   lang: Locale;
   t?: Dict["swiss"];
+  /** Datos de /api/bracket que le pasa TournamentPhases. null = aún cargando. */
+  data?: BracketResponse | null;
 };
 
-export default function SwissStage({ lang, t }: Props) {
+export default function SwissStage({ lang, t, data }: Props) {
   // Datos en vivo de /api/bracket; si no hay, se usa data/swiss.json.
-  const live = useBracket();
-  const rounds: any[] = live?.swiss ?? swissData;
+  const rounds: any[] = data?.swiss ?? swissData;
   const roundTemplate = t?.round || "Ronda {n}";
 
   return (
@@ -50,10 +52,12 @@ export default function SwissStage({ lang, t }: Props) {
 
                 return (
                   <div key={idx} style={{ marginTop: newGroup ? "1.1rem" : 0, display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px", background: "rgba(0,0,0,0.2)", padding: "4px", borderRadius: "4px" }}>
-                    <div style={{ padding: "6px", textAlign: "center", fontWeight: "bold", fontSize: "0.85rem", borderRadius: "4px", background: styleA.bg, color: styleA.color }}>
+                    <div style={{ padding: "6px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontWeight: "bold", fontSize: "0.85rem", borderRadius: "4px", background: styleA.bg, color: styleA.color }}>
+                      <TeamLogo code={match.teamA} size={18} />
                       {match.teamA || "—"}
                     </div>
-                    <div style={{ padding: "6px", textAlign: "center", fontWeight: "bold", fontSize: "0.85rem", borderRadius: "4px", background: styleB.bg, color: styleB.color }}>
+                    <div style={{ padding: "6px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", fontWeight: "bold", fontSize: "0.85rem", borderRadius: "4px", background: styleB.bg, color: styleB.color }}>
+                      <TeamLogo code={match.teamB} size={18} />
                       {match.teamB || "—"}
                     </div>
                   </div>

@@ -69,7 +69,10 @@
     "id": "koi",
     "name": "Movistar KOI",
     "shortName": "KOI",
-    "file": "Movistar_KOIlogo_square.webp"
+    "file": "Movistar_KOIlogo_square.webp",
+    "codes": [
+      "MKOI"
+    ]
   },
   {
     "id": "t1",
@@ -81,7 +84,10 @@
     "id": "tl",
     "name": "Team Liquid",
     "shortName": "TL",
-    "file": "Team_Liquidlogo_square.webp"
+    "file": "Team_Liquidlogo_square.webp",
+    "codes": [
+      "TLAW"
+    ]
   },
   {
     "id": "tsw",

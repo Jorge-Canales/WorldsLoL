@@ -8,7 +8,8 @@
     "stats": "Números",
     "hall": "Salón de la fama",
     "switchLabel": "EN",
-    "switchAria": "Switch to English"
+    "switchAria": "Switch to English",
+    "languageLabel": "Idioma"
   },
   "hero": {
     "loading": "Worlds LoL",
@@ -54,15 +55,20 @@
   "live": {
     "title": "Marcadores en vivo",
     "subtitle": "Se actualiza solo cada 30 segundos.",
-    "pending": "El seguimiento automático se conecta en la siguiente fase. Mientras tanto, sigue la transmisión oficial en lolesports.com.",
+    "pending": "Cargando marcadores…",
     "stale": "Mostrando los últimos datos disponibles; la fuente tardó en responder.",
     "empty": "No hay partidos en este momento.",
     "badgeLive": "En vivo",
     "badgeUpcoming": "Próximo",
     "badgeFinished": "Final",
     "minute": "Min {n}",
+    "startsAt": "Empieza {time}",
+    "vs": "vs",
     "bestOf": "Mejor de {n}",
-    "updated": "Actualizado {time}"
+    "updated": "Actualizado {time}",
+    "nextMatch": "Próximo partido",
+    "startsIn": "Empieza en {time}",
+    "startingNow": "Está por comenzar"
   },
   "stats": {
     "title": "Los números del trono",
@@ -77,6 +83,46 @@
     "LPL": "LPL · China",
     "EMEA": "EMEA · Europa",
     "GPL": "GPL · Taiwán y SEA"
+  },
+  "participants": {
+    "title": "Equipos en competencia",
+    "subtitle": "Las organizaciones listas para la gloria en este torneo."
+  },
+  "swiss": {
+    "title": "Fase Suiza",
+    "subtitle": "Seguimiento de enfrentamientos ronda por ronda.",
+    "round": "Ronda {n}"
+  },
+  "knockout": {
+    "title": "Fase Eliminatoria",
+    "subtitle": "Llaves finales hacia la Gran Final de Worlds.",
+    "quarterfinals": "Cuartos de final",
+    "semifinals": "Semifinales",
+    "final": "Gran Final",
+    "winner": "Campeón"
+  },
+  "phases": {
+    "switchAria": "Cambiar de fase",
+    "maintenanceTitle": "Sistema en Mantenimiento",
+    "maintenanceBody": "Hay múltiples fases activas simultáneamente en la configuración.",
+    "tabs": {
+      "playIn": "Play-In",
+      "swiss": "Suiza",
+      "knockout": "Eliminatoria"
+    }
+  },
+  "playIn": {
+    "title": "Fase Play-In",
+    "subtitle": "Los equipos pelean por el último lugar en la Fase Suiza.",
+    "loading": "Cargando Play-In…",
+    "empty": "El Play-In aún no tiene partidos publicados.",
+    "round1": "Ronda 1",
+    "round2": "Ronda 2",
+    "qualification": "Partido de clasificación",
+    "day": "Día {n}",
+    "losers": "Bracket de perdedores",
+    "live": "EN VIVO",
+    "qualified": "Clasificado al Swiss:"
   },
   "hall": {
     "title": "Salón de la fama",

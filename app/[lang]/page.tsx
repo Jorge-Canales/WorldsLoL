@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import PhaseHero from "@/components/PhaseHero";
 import LiveSection from "@/components/LiveSection";
+import ParticipantsSection from "@/components/ParticipantsSection";
+import TournamentPhases from "@/components/TournamentPhases";
 import Stats from "@/components/Stats";
 import HallOfFame from "@/components/HallOfFame";
 import { dictionaries, isLocale } from "@/lib/i18n";
@@ -39,6 +41,13 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           champions={champions}
         />
 
+        {/* Equipos en competencia */}
+        <ParticipantsSection t={t.participants} />
+
+        {/* Fases del torneo (Play-In, Swiss, Knockout) */}
+        <TournamentPhases lang={lang} t={t.swiss} tKnockout={t.knockout} />
+
+        {/* Los números del trono y Salón de la Fama */}
         <Stats t={t.stats} regionsDict={t.regions} champions={champions} />
         <HallOfFame lang={lang} t={t.hall} regionsDict={t.regions} champions={champions} />
       </main>

@@ -16,6 +16,25 @@ type Props = {
   roster: PlayerView[];
 };
 
+// Mapeo de imagen por año de campeón
+const WINNER_LOGOS: Record<number, string> = {
+  2011: "Fnaticlogo_2011.webp",
+  2012: "Taipei_Assassinslogo_2012.webp",
+  2013: "SK_Telecom_T1logo_2013_2015_2016.webp",
+  2014: "Samsung_Whitelogo_2014.webp",
+  2015: "SK_Telecom_T1logo_2013_2015_2016.webp",
+  2016: "SK_Telecom_T1logo_2013_2015_2016.webp",
+  2017: "Samsung_Whitelogo_2017.webp",
+  2018: "Invictus_Gaminglogo_2018.webp",
+  2019: "FunPlus_Phoenixlogo_2019.webp",
+  2020: "DAMWON_Gaminglogo_2020.webp",
+  2021: "EDward_Gaminglogo_2021.webp",
+  2022: "DRXlogo_2022.webp",
+  2023: "T1logo_2023_2024_2025.webp",
+  2024: "T1logo_2023_2024_2025.webp",
+  2025: "T1logo_2023_2024_2025.webp",
+};
+
 function MourningRibbon({ label }: { label: string }) {
   return (
     <svg
@@ -41,12 +60,59 @@ export default function ChampionCard({ champion: c, theme, latest, t, region, ho
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const renamed = c.teamAtTime !== c.org;
+  const logoFile = WINNER_LOGOS[c.year];
 
   return (
-    <article className={`feature feature-${theme} champ${latest ? " champ-latest" : ""}`}>
+    <article
+      className={`feature feature-${theme} champ${latest ? " champ-latest" : ""}`}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.25) 100%)",
+      }}
+    >
+      {/* Fondo con el corte diagonal original de 120px */}
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          right: 0,
+          width: "120px",
+          height: "120px",
+          background: "linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.06) 50%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Logo del campeón con tamaño extra grande (115px) */}
+      {logoFile && (
+        <div
+          style={{
+            position: "absolute",
+            top: "0.5rem",
+            right: "0.5rem",
+            width: "115px",
+            height: "115px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            opacity: 0.9,
+            filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
+          }}
+        >
+          <img
+            src={`/media/logos/winners/${logoFile}`}
+            alt={c.teamAtTime}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        </div>
+      )}
+
       <p className="champ-year">{c.year}</p>
       <p className="champ-label">{t.champion}</p>
-      <h3 className="h3 champ-name">{c.teamAtTime}</h3>
+      <h3 className="h3 champ-name" style={{ paddingRight: logoFile ? "5.5rem" : "0" }}>
+        {c.teamAtTime}
+      </h3>
       {renamed && <p className="champ-sub">{fill(t.nowAs, { name: c.org })}</p>}
 
       <dl className="champ-facts">
@@ -89,7 +155,6 @@ export default function ChampionCard({ champion: c, theme, latest, t, region, ho
           className="roster-dialog"
           aria-labelledby={titleId}
           onClick={(e) => {
-            // clic en el fondo oscuro = cerrar
             if (e.target === dialogRef.current) dialogRef.current?.close();
           }}
         >
@@ -111,7 +176,10 @@ export default function ChampionCard({ champion: c, theme, latest, t, region, ho
             {roster.map((p) => (
               <li className="player" key={p.name}>
                 <div className="player-name-row">
-                  <h4 className="player-name">{p.deceased && <MourningRibbon label={t.inMemoriam} />}{p.name}</h4>
+                  <h4 className="player-name">
+                    {p.deceased && <MourningRibbon label={t.inMemoriam} />}
+                    {p.name}
+                  </h4>
                   <span className={`player-role${p.sub ? " player-role-sub" : ""}`}>
                     {t.roles[p.role]}
                     {p.sub ? ` · ${t.substitute}` : ""}

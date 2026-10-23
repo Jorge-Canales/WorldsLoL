@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import TeamLogo from "./TeamLogo";
 import { fill, type Dict, type Locale } from "@/lib/i18n";
 import { getPhase } from "@/lib/phase";
 import { useNow } from "@/lib/useNow";
-import type { Champion, Edition, LiveResponse } from "@/lib/types";
+import type { Champion, Edition, LiveMatch, LiveResponse } from "@/lib/types";
 
 type Props = {
   lang: Locale;
@@ -15,6 +16,47 @@ type Props = {
 };
 
 const POLL_MS = 30_000;
+
+/** "2 d 3 h", "4 h 12 min", "7 min 30 s": abreviaturas que valen igual en español e inglés. */
+function formatIn(ms: number) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const d = Math.floor(total / 86_400);
+  const h = Math.floor((total % 86_400) / 3_600);
+  const m = Math.floor((total % 3_600) / 60);
+  const s = total % 60;
+  if (d > 0) return `${d} d ${h} h`;
+  if (h > 0) return `${h} h ${m} min`;
+  return `${m} min ${s} s`;
+}
+
+/** Tarjeta con cuenta regresiva al siguiente partido (cuando no hay ninguno en vivo). */
+function NextMatch({ match, t }: { match: LiveMatch; t: Dict["live"] }) {
+  const now = useNow(1000);
+  if (now === null) return null;
+  const ms = Date.parse(match.startTime) - now;
+  const [a, b] = match.teams;
+
+  return (
+    <div
+      className="feature feature-green"
+      style={{ padding: "20px 24px", marginBottom: 16 }}
+      role="timer"
+      aria-live="off"
+    >
+      <p className="stage-title">{t.nextMatch}</p>
+      <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 12, margin: "10px 0 6px" }}>
+        <TeamLogo code={a.code} name={a.name} size={32} />
+        <span className="team">{a.name}</span>
+        <span className="muted">{t.vs}</span>
+        <span className="team">{b.name}</span>
+        <TeamLogo code={b.code} name={b.name} size={32} />
+      </div>
+      <p className="stage-note" style={{ margin: 0 }}>
+        {ms > 0 ? fill(t.startsIn, { time: formatIn(ms) }) : t.startingNow}
+      </p>
+    </div>
+  );
+}
 
 export default function LiveSection({ lang, t, editions, celebrationDays, champions }: Props) {
   const now = useNow(10_000);
@@ -40,22 +82,37 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
       }
     }
 
+    // Con la pestaña oculta no se consulta; al volver, se actualiza de inmediato.
+    const tick = () => {
+      if (!document.hidden) load();
+    };
     load();
-    const id = setInterval(load, POLL_MS);
+    const id = setInterval(tick, POLL_MS);
+    document.addEventListener("visibilitychange", tick);
     return () => {
       cancelled = true;
       clearInterval(id);
+      document.removeEventListener("visibilitychange", tick);
     };
   }, [isLive]);
 
   if (!isLive) return null;
 
   const timeFmt = new Intl.DateTimeFormat(lang, { timeStyle: "short" });
+  const startFmt = new Intl.DateTimeFormat(lang, {
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+  });
   const badge = {
     live: t.badgeLive,
     upcoming: t.badgeUpcoming,
     finished: t.badgeFinished,
   } as const;
+
+  // La API ordena: en vivo, próximos (el más cercano primero), terminados.
+  const nothingLive = !!data && !data.matches.some((m) => m.status === "live");
+  const next = nothingLive ? data.matches.find((m) => m.status === "upcoming") : undefined;
 
   return (
     <section id="live" className="section container">
@@ -71,6 +128,8 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
           <p className="muted">{t.empty}</p>
         )}
 
+        {next && <NextMatch match={next} t={t} />}
+
         {data && data.matches.length > 0 && (
           <ul className="matches">
             {data.matches.map((m) => (
@@ -83,13 +142,29 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
                   {m.status === "live" && m.gameMinute !== null && (
                     <span className="muted">{fill(t.minute, { n: m.gameMinute })}</span>
                   )}
+                  {m.status === "upcoming" && (
+                    <span className="muted">
+                      {fill(t.startsAt, { time: startFmt.format(new Date(m.startTime)) })}
+                    </span>
+                  )}
                 </div>
                 <div className="match-teams">
-                  <span className="team">{m.teams[0].name}</span>
-                  <span className="score">
-                    {m.teams[0].score} – {m.teams[1].score}
+                  <span className="team" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <TeamLogo code={m.teams[0].code} name={m.teams[0].name} size={28} />
+                    {m.teams[0].name}
                   </span>
-                  <span className="team team-right">{m.teams[1].name}</span>
+                  <span className="score">
+                    {m.status === "upcoming"
+                      ? t.vs
+                      : `${m.teams[0].score} – ${m.teams[1].score}`}
+                  </span>
+                  <span
+                    className="team team-right"
+                    style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10 }}
+                  >
+                    {m.teams[1].name}
+                    <TeamLogo code={m.teams[1].code} name={m.teams[1].name} size={28} />
+                  </span>
                 </div>
               </li>
             ))}

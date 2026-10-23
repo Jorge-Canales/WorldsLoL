@@ -1,9 +1,8 @@
 import Link from "next/link";
+import LangMenu from "./LangMenu";
 import type { Dict, Locale } from "@/lib/i18n";
 
 export default function Nav({ lang, t }: { lang: Locale; t: Dict["nav"] }) {
-  const other: Locale = lang === "es" ? "en" : "es";
-
   return (
     <header className="nav">
       <div className="nav-inner container">
@@ -16,9 +15,7 @@ export default function Nav({ lang, t }: { lang: Locale; t: Dict["nav"] }) {
           <a href="#hall">{t.hall}</a>
         </nav>
 
-        <Link href={`/${other}`} className="btn btn-ghost" aria-label={t.switchAria} hrefLang={other}>
-          {t.switchLabel}
-        </Link>
+        <LangMenu lang={lang} label={t.languageLabel} />
       </div>
     </header>
   );

@@ -1,11 +1,12 @@
 import es from "@/dictionaries/es.json";
 import en from "@/dictionaries/en.json";
+import ko from "@/dictionaries/ko.json";
 
-export const locales = ["es", "en"] as const;
+export const locales = ["es", "en", "ko"] as const;
 export type Locale = (typeof locales)[number];
 export type Dict = typeof es;
 
-export const dictionaries: Record<Locale, Dict> = { es, en };
+export const dictionaries: Record<Locale, Dict> = { es, en, ko };
 
 export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);

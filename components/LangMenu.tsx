@@ -10,6 +10,7 @@ import styles from "./LangMenu.module.css";
 const OPTIONS: { code: Locale; label: string }[] = [
   { code: "es", label: "Español" },
   { code: "en", label: "English" },
+  { code: "ko", label: "한국어" },
 ];
 
 function GlobeIcon() {
@@ -58,7 +59,8 @@ export default function LangMenu({ lang, label }: { lang: Locale; label: string 
   const menuId = useId();
 
   const pathname = usePathname() ?? `/${lang}`;
-  const rest = pathname.replace(/^\/(es|en)(?=\/|$)/, "");
+  // Si agregas otro idioma, súmalo aquí y en OPTIONS.
+  const rest = pathname.replace(/^\/(es|en|ko)(?=\/|$)/, "");
 
   useEffect(() => {
     if (!open) return;

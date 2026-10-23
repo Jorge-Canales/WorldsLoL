@@ -1,0 +1,24 @@
+/* Ajustes tipográficos para coreano (Hangul).
+   Solo se activan cuando <html lang="ko">, así que no afectan a español ni inglés. */
+
+:lang(ko) body {
+  letter-spacing: 0;
+  word-break: keep-all; /* no corta palabras a la mitad */
+  line-break: strict;
+}
+
+/* Los títulos del sitio usan interlineado muy apretado (pensado para letras latinas
+   en mayúsculas); el Hangul necesita más aire o las líneas se montan. */
+:lang(ko) .display,
+:lang(ko) .h2,
+:lang(ko) .h3,
+:lang(ko) .stage-big,
+:lang(ko) .stage-champion,
+:lang(ko) .champ-name,
+:lang(ko) .player-name {
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+:lang(ko) .champ-latest .champ-name {
+  line-height: 1.2;
+}

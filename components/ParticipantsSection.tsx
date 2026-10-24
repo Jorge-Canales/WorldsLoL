@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import type { Dict } from "@/lib/i18n";
 import participantsData from "@/data/participants.json";
@@ -23,9 +23,15 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
 
   const open = (team: Participant) => {
     setActive(team);
-    dialogRef.current?.showModal();
     load();
   };
+
+  // La ventana se abre DESPUÉS de que React ya puso el equipo nuevo y ANTES de pintar:
+  // así nunca se ve un instante el roster del equipo anterior (ese era el "salto" de tamaño).
+  useLayoutEffect(() => {
+    const d = dialogRef.current;
+    if (active && d && !d.open) d.showModal();
+  }, [active]);
 
   const roster = active ? data?.[active.id]?.players ?? [] : [];
 
@@ -72,6 +78,7 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
         ref={dialogRef}
         className="roster-dialog"
         aria-labelledby={titleId}
+        onClose={() => setActive(null)}
         onClick={(e) => {
           if (e.target === dialogRef.current) dialogRef.current?.close();
         }}
@@ -120,7 +127,7 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
             ))}
           </ul>
         ) : (
-          <p className="muted" style={{ padding: "0 28px 28px" }}>
+          <p className="muted" style={{ padding: "0 28px 28px", minHeight: "16rem" }}>
             {loading ? t.rosterLoading : t.rosterEmpty}
           </p>
         )}

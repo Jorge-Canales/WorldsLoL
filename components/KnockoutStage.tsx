@@ -91,32 +91,50 @@ export default function KnockoutStage({ lang, t, data }: Props) {
           display: "grid",
           gridTemplateColumns: "repeat(3, minmax(200px, 1fr))",
           gap: "1.5rem",
-          alignItems: "center",
+          alignItems: "stretch",
           minWidth: "700px",
         }}
       >
         {/* Cuartos de final */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--color-fog)" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--color-fog)", marginBottom: "1rem" }}>
             {titles.qf}
           </h4>
-          {bracket.quarterfinals.map((m) => renderMatch(m))}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
+            {/* Bloque Superior de Cuartos (Juegos 1 y 2) */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {bracket.quarterfinals.slice(0, 2).map((m) => renderMatch(m))}
+            </div>
+
+            {/* Bloque Inferior de Cuartos (Juegos 3 y 4) */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {bracket.quarterfinals.slice(2, 4).map((m) => renderMatch(m))}
+            </div>
+          </div>
         </div>
 
         {/* Semifinales */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-          <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--color-fog)" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "var(--color-fog)", marginBottom: "1rem" }}>
             {titles.sf}
           </h4>
-          {bracket.semifinals.map((m) => renderMatch(m))}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-around", flexGrow: 1 }}>
+            {/* Semifinal 1: Centrada verticalmente con respecto al par superior de Cuartos */}
+            {bracket.semifinals[0] && renderMatch(bracket.semifinals[0])}
+
+            {/* Semifinal 2: Centrada verticalmente con respecto al par inferior de Cuartos */}
+            {bracket.semifinals[1] && renderMatch(bracket.semifinals[1])}
+          </div>
         </div>
 
         {/* Gran Final */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "#f1c40f" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <h4 style={{ textAlign: "center", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "1px", color: "#f1c40f", marginBottom: "1rem" }}>
             {titles.fn}
           </h4>
-          {bracket.final.map((m) => renderMatch(m, true))}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", flexGrow: 1 }}>
+            {bracket.final.map((m) => renderMatch(m, true))}
+          </div>
         </div>
       </div>
     </div>

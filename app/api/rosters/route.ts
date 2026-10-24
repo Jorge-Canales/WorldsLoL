@@ -1,10 +1,14 @@
-import { fetchTeams, type ApiTeamInfo } from "@/lib/lolesportsTeams";
+import { fetchAllEvents, type ApiEvent } from "@/lib/lolesports";
+import { fetchLineup, fetchTeams, type ApiTeamInfo, type LineupPlayer } from "@/lib/lolesportsTeams";
 import participantsData from "@/data/participants.json";
 import overridesData from "@/data/currentRosters.json";
 
 /**
  * Rosters actuales de los equipos en competencia, sacados de la API de lolesports
  * (getTeams). Cada equipo de data/participants.json se busca por nombre o sigla.
+ * Titulares = los 5 que jugaron el último juego terminado del equipo (feed de lolesports);
+ * el resto de la plantilla sale como suplente. Si no hay juegos aún, se muestra la plantilla
+ * sin etiquetar suplentes.
  * Los rosters casi no cambian: la respuesta se guarda 1 hora.
  * Para corregir uno a mano: data/currentRosters.json (gana sobre la API).
  *
@@ -60,28 +64,58 @@ function findTeam(p: Participant, teams: ApiTeamInfo[]): ApiTeamInfo | undefined
     .sort((a, b) => (b.players?.length ?? 0) - (a.players?.length ?? 0))[0];
 }
 
-/** Titulares = el primero de cada rol; los demás de ese rol quedan como suplentes. */
-function toPlayers(team: ApiTeamInfo): RosterPlayer[] {
-  const seen = new Set<string>();
+const sortPlayers = (list: RosterPlayer[]) =>
+  list.sort((a, b) => Number(a.sub) - Number(b.sub) || ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role));
+
+/** Quita la sigla del equipo del nombre del feed: "GEN Chovy" → "Chovy". */
+const stripTag = (name: string) => name.replace(/^\S+\s+/, "");
+
+/**
+ * Con `lineup` (quién jugó de verdad) los titulares son esos 5 y el resto son suplentes.
+ * Sin `lineup` se muestra la plantilla completa, sin marcar suplentes (no hay forma de saberlo).
+ */
+function toPlayers(team: ApiTeamInfo, lineup: LineupPlayer[] | null): RosterPlayer[] {
+  const starters = new Map(lineup?.map((l) => [l.playerId, l]) ?? []);
   const list: RosterPlayer[] = [];
+
   for (const pl of team.players ?? []) {
-    const role = ROLE_MAP[(pl.role ?? "").toLowerCase()];
+    const started = pl.id ? starters.get(pl.id) : undefined;
+    const role = ROLE_MAP[(started?.role || pl.role || "").toLowerCase()];
     if (!role || !pl.summonerName) continue; // sin rol de juego (entrenadores, etc.)
     list.push({
       name: pl.summonerName,
       realName: [pl.firstName, pl.lastName].filter(Boolean).join(" "),
       role,
-      sub: seen.has(role),
+      sub: lineup ? !started : false,
       image: pl.image || null,
     });
-    seen.add(role);
+    if (pl.id) starters.delete(pl.id);
   }
-  return list.sort(
-    (a, b) => Number(a.sub) - Number(b.sub) || ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role),
-  );
+
+  // Titulares que getTeams no trae (cambio reciente): se agregan desde el feed.
+  for (const l of starters.values()) {
+    const role = ROLE_MAP[l.role.toLowerCase()];
+    if (role) list.push({ name: stripTag(l.summonerName), realName: "", role, sub: false, image: null });
+  }
+  return sortPlayers(list);
+}
+
+/** Último partido terminado de cada equipo, buscando por sus siglas. */
+function lastMatchId(events: ApiEvent[], codes: string[]): string | undefined {
+  return events
+    .filter(
+      (e) =>
+        e.state === "completed" &&
+        e.match?.id &&
+        e.startTime &&
+        e.match.teams?.some((t) => t.code && codes.includes(t.code.toUpperCase())),
+    )
+    .sort((a, b) => Date.parse(b.startTime!) - Date.parse(a.startTime!))[0]?.match?.id;
 }
 
 let lastGood: RostersResponse | null = null;
+
+export const maxDuration = 30; // consulta varias APIs: más margen que el límite por defecto
 
 export async function GET(request: Request) {
   const debug = new URL(request.url).searchParams.has("debug");
@@ -92,8 +126,25 @@ export async function GET(request: Request) {
   const missing: string[] = [];
 
   try {
-    const apiTeams = await fetchTeams();
+    const [apiTeams, events] = await Promise.all([
+      fetchTeams(),
+      fetchAllEvents(1, 0).catch(() => [] as ApiEvent[]), // sin calendario: plantilla sin titulares
+    ]);
     const teams: RostersResponse["teams"] = {};
+
+    // Titulares reales de cada equipo (en paralelo; si uno falla, ese equipo queda sin marcar).
+    const lineups = new Map<string, LineupPlayer[] | null>();
+    await Promise.all(
+      participants.map(async (p) => {
+        const codes = [p.shortName, ...(p.codes ?? [])].map((c) => c.toUpperCase());
+        const matchId = lastMatchId(events, codes);
+        try {
+          lineups.set(p.id, matchId ? await fetchLineup(matchId, codes) : null);
+        } catch {
+          lineups.set(p.id, null);
+        }
+      }),
+    );
 
     for (const p of participants) {
       const manual = overrides[p.id];
@@ -110,8 +161,9 @@ export async function GET(request: Request) {
         missing.push(p.id);
         continue;
       }
-      teams[p.id] = { name: p.name, players: toPlayers(team) };
-      found[p.id] = `${team.name} (${team.code})`;
+      const lineup = lineups.get(p.id) ?? null;
+      teams[p.id] = { name: p.name, players: toPlayers(team, lineup) };
+      found[p.id] = `${team.name} (${team.code}) · titulares: ${lineup ? "del último juego" : "SIN DATOS (plantilla completa)"}`;
     }
 
     body = { status: "ok", updatedAt: new Date().toISOString(), teams };

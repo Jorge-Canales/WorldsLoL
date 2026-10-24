@@ -1,152 +1,108 @@
-import type { LiveMatch, LiveResponse } from "@/lib/types";
+import { api } from "@/lib/lolesports";
+import { getPlayerHistory } from "@/lib/roster";
+import type { Role } from "@/lib/roster";
+import {
+  apiRole,
+  findApiTeam,
+  sortPlayers,
+  type ApiTeamLite,
+  type ParticipantLite,
+  type TeamPlayer,
+  type TeamRoster,
+  type TeamsPayload,
+} from "@/lib/teams";
+import type { Champion } from "@/lib/types";
+import championsData from "@/data/champions.json";
+import participantsData from "@/data/participants.json";
+import manualData from "@/data/teamRosters.json";
 
 /**
- * FASE 3: marcadores reales del Worlds.
+ * Roster de cada equipo del torneo (data/participants.json).
  *
- * Fuente: la API NO oficial que usa lolesports.com (getLeagues + getSchedule).
- * Se consulta solo desde el servidor. La clave de abajo es la clave pública
- * que usa la propia página de LoL Esports (está publicada en las librerías de
- * la comunidad); si algún día cambia, se puede poner la nueva en Vercel como
- * variable de entorno LOLESPORTS_API_KEY sin tocar el código.
+ * 1. Si en data/teamRosters.json escribiste jugadores de un equipo, se usan esos.
+ * 2. Si no, se toman de la API de LoL Esports (getTeams) y se descartan entrenadores.
  *
- * Capas de protección:
- *  1. Cache-Control: Vercel guarda la respuesta 15 s (mil visitantes = 1 consulta).
- *  2. Si la fuente falla, se devuelve el último dato bueno con status "stale".
- *  3. Cada consulta a la fuente tiene un límite de 6 s.
+ * A cada jugador se le agrega su historial de copas mundiales (data/rosters.json) para
+ * poder resaltar a los campeones. Los rosters casi no cambian: se guardan 1 hora.
+ *
+ * Abre /api/teams?debug=1 para ver con qué equipo de la API se emparejó cada participante.
  */
 
-const API_BASE = "https://esports-api.lolesports.com/persisted/gw";
-const API_KEY = process.env.LOLESPORTS_API_KEY ?? "0TvQnueqKa5mxJntVWt0w4LpLfEkrV1Ta8rQBb9Z";
+const champions = championsData as Champion[];
+const participants = participantsData as ParticipantLite[];
+const manual = (manualData as unknown as {
+  rosters?: Record<string, { name?: string; role?: string; sub?: boolean }[]>;
+}).rosters ?? {};
 
-const HOUR = 3_600_000;
-const LEAGUE_TTL = 6 * HOUR;
-const FINISHED_WINDOW = 24 * HOUR; // partidos terminados que se siguen mostrando
-const UPCOMING_WINDOW = 36 * HOUR; // partidos futuros que se muestran
-const MAX_FINISHED = 8;
-const MAX_UPCOMING = 8;
+const TTL = 60 * 60 * 1000;
+let cache: { at: number; payload: TeamsPayload } | null = null;
 
-// ---- Forma (parcial) de lo que responde la API no oficial ----
-type ApiTeam = {
-  name?: string;
-  code?: string;
-  result?: { gameWins?: number } | null;
-};
-type ApiEvent = {
-  startTime?: string;
-  state?: string; // "unstarted" | "inProgress" | "completed"
-  type?: string; // "match" | "show"
-  blockName?: string;
-  match?: {
-    id?: string;
-    teams?: ApiTeam[];
-    strategy?: { count?: number };
-  };
-};
+const withHistory = (name: string, role: Role, sub: boolean): TeamPlayer => ({
+  name,
+  role,
+  sub,
+  ...getPlayerHistory(name, champions),
+});
 
-async function api<T>(path: string): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    headers: { "x-api-key": API_KEY },
-    cache: "no-store",
-    signal: AbortSignal.timeout(6000),
-  });
-  if (!res.ok) throw new Error(`LoL Esports respondió ${res.status}`);
-  return (await res.json()) as T;
+function manualRoster(id: string): TeamRoster | null {
+  const players = (manual[id] ?? [])
+    .filter((p) => p.name && p.name.trim() !== "" && apiRole(p.role === "adc" ? "bottom" : p.role))
+    .map((p) => withHistory(p.name!.trim(), (p.role as Role), p.sub === true));
+  return players.length > 0 ? { source: "manual", players: sortPlayers(players) } : null;
 }
 
-// El id de la liga "Worlds" se busca una vez y se recuerda un rato.
-let leagueCache: { id: string; at: number } | null = null;
-
-async function getWorldsLeagueId(): Promise<string> {
-  if (process.env.WORLDS_LEAGUE_ID) return process.env.WORLDS_LEAGUE_ID;
-  if (leagueCache && Date.now() - leagueCache.at < LEAGUE_TTL) return leagueCache.id;
-
-  const json = await api<{ data?: { leagues?: { id: string; slug: string }[] } }>(
-    "/getLeagues?hl=en-US",
-  );
-  const league = json.data?.leagues?.find((l) => l.slug === "worlds");
-  if (!league) throw new Error("No se encontró la liga Worlds en la API");
-  leagueCache = { id: league.id, at: Date.now() };
-  return league.id;
-}
-
-function toMatch(e: ApiEvent): LiveMatch | null {
-  const teams = e.match?.teams;
-  if (e.type && e.type !== "match") return null;
-  if (!e.match?.id || !e.startTime || !teams || teams.length !== 2) return null;
-
-  const status: LiveMatch["status"] =
-    e.state === "inProgress" ? "live" : e.state === "completed" ? "finished" : "upcoming";
-
-  const side = (t: ApiTeam) => ({
-    name: t.name ?? "TBD",
-    code: t.code ?? "TBD",
-    score: t.result?.gameWins ?? 0,
+async function build(notes: string[]): Promise<TeamsPayload> {
+  const teams: TeamsPayload["teams"] = {};
+  const pending = participants.filter((p) => {
+    const m = manualRoster(p.id);
+    if (m) teams[p.id] = m;
+    return !m;
   });
 
-  return {
-    id: e.match.id,
-    stage: e.blockName ?? "",
-    bestOf: e.match.strategy?.count ?? 1,
-    status,
-    startTime: e.startTime,
-    gameMinute: null, // el minuto de juego queda para la Fase 3B
-    teams: [side(teams[0]), side(teams[1])],
-  };
+  let ok = true;
+  if (pending.length > 0) {
+    try {
+      const json = await api<{ data?: { teams?: ApiTeamLite[] } }>("/getTeams?hl=en-US");
+      const apiTeams = json.data?.teams ?? [];
+      notes.push(`API: ${apiTeams.length} equipos recibidos`);
+      for (const p of pending) {
+        const found = findApiTeam(p, apiTeams);
+        notes.push(`${p.id}: ${found ? `${found.name} (${found.code})` : "sin pareja en la API"}`);
+        if (!found) continue;
+        const players = (found.players ?? []).flatMap((pl) => {
+          const role = apiRole(pl.role);
+          return role && pl.summonerName ? [withHistory(pl.summonerName, role, false)] : [];
+        });
+        if (players.length > 0) teams[p.id] = { source: "api", players: sortPlayers(players) };
+      }
+    } catch (err) {
+      ok = false;
+      notes.push(`Error: ${err instanceof Error ? err.message : String(err)}`);
+    }
+  }
+
+  return { status: ok ? "ok" : "stale", updatedAt: new Date().toISOString(), teams };
 }
-
-/** Elige y ordena lo que vale la pena mostrar ahora. */
-export function pickMatches(events: ApiEvent[], now: number): LiveMatch[] {
-  const all = events.map(toMatch).filter((m): m is LiveMatch => m !== null);
-  const at = (m: LiveMatch) => Date.parse(m.startTime);
-
-  const live = all.filter((m) => m.status === "live").sort((a, b) => at(a) - at(b));
-  const upcoming = all
-    .filter((m) => m.status === "upcoming" && at(m) <= now + UPCOMING_WINDOW)
-    .sort((a, b) => at(a) - at(b))
-    .slice(0, MAX_UPCOMING);
-  const finished = all
-    .filter((m) => m.status === "finished" && at(m) >= now - FINISHED_WINDOW)
-    .sort((a, b) => at(b) - at(a))
-    .slice(0, MAX_FINISHED);
-
-  return [...live, ...upcoming, ...finished];
-}
-
-async function loadMatches(): Promise<LiveMatch[]> {
-  const leagueId = await getWorldsLeagueId();
-  const json = await api<{ data?: { schedule?: { events?: ApiEvent[] } } }>(
-    `/getSchedule?hl=en-US&leagueId=${encodeURIComponent(leagueId)}`,
-  );
-  return pickMatches(json.data?.schedule?.events ?? [], Date.now());
-}
-
-// Último dato bueno, por si la fuente tarda o falla.
-let lastGood: LiveResponse | null = null;
 
 export async function GET(request: Request) {
   const debug = new URL(request.url).searchParams.has("debug");
-  let body: LiveResponse;
-  let error: string | null = null;
-  let ok = true;
+  const notes: string[] = [];
 
-  try {
-    const matches = await loadMatches();
-    body = { status: "ok", updatedAt: new Date().toISOString(), matches };
-    lastGood = body;
-  } catch (err) {
-    ok = false;
-    error = err instanceof Error ? err.message : String(err);
-    console.error("[api/live]", error);
-    body = lastGood
-      ? { ...lastGood, status: "stale" }
-      : { status: "stale", updatedAt: new Date().toISOString(), matches: [] };
+  let payload: TeamsPayload;
+  if (cache && Date.now() - cache.at < TTL && !debug) {
+    payload = cache.payload;
+  } else {
+    payload = await build(notes);
+    if (payload.status === "ok") cache = { at: Date.now(), payload };
+    else if (cache) payload = { ...cache.payload, status: "stale" }; // la API falló: el último bueno
   }
 
-  return Response.json(debug ? { ...body, debug: error } : body, {
+  return Response.json(debug ? { ...payload, debug: notes } : payload, {
     headers: {
-      "Cache-Control": ok
-        ? "public, s-maxage=15, stale-while-revalidate=30"
-        : "public, s-maxage=5, stale-while-revalidate=10",
+      "Cache-Control":
+        payload.status === "ok"
+          ? "public, s-maxage=3600, stale-while-revalidate=86400"
+          : "public, s-maxage=30, stale-while-revalidate=60",
     },
   });
 }

@@ -99,6 +99,12 @@
     "GPL": "GPL · Taiwan & SEA"
   },
   "participants": {
+    "rosterTitle": "Current roster",
+    "close": "Close",
+    "rosterLoading": "Loading roster…",
+    "rosterEmpty": "Roster not available right now.",
+    "substitute": "Substitute",
+    "roles": {"top": "Top", "jungle": "Jungle", "mid": "Mid", "adc": "ADC", "support": "Support"},
     "title": "Competing Teams",
     "subtitle": "The organizations ready to chase glory in this tournament."
   },

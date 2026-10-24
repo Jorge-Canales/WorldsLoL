@@ -17,7 +17,7 @@ import { fetchCurrentEvents, fetchLiveGame, type ApiEvent, type ApiTeam } from "
  */
 
 const HOUR = 3_600_000;
-const FINISHED_WINDOW = 24 * HOUR; // partidos terminados que se siguen mostrando
+const FINISHED_WINDOW = 12 * HOUR; // un partido terminado se sigue mostrando hasta 12 h después de que EMPEZÓ
 const UPCOMING_WINDOW = 36 * HOUR; // partidos futuros que se muestran
 const MAX_FINISHED = 8;
 const MAX_UPCOMING = 8;

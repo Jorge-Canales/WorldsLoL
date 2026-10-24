@@ -1,0 +1,357 @@
+{
+  "_note": "Plantilla para escribir a mano el roster de cada equipo. Si un equipo tiene al menos un nombre escrito, se usa SU lista y se ignora lo que diga la API. Si lo dejas con todos los nombres vacíos (\"\"), el roster sale solo de la API. Roles: top, jungle, mid, adc, support. Para un suplente agrega \"sub\": true en ese jugador, o agrega más filas. Escribe los apodos igual que en data/rosters.json para que las copas mundiales se calculen solas. Las claves son los id de data/participants.json.",
+  "rosters": {
+    "al": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "blg": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "cfo": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "dk": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "g2": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "gen": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "hle": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "ig": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "kc": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "los": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "lyon": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "koi": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "t1": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "tl": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "tsw": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ],
+    "tes": [
+      {
+        "name": "",
+        "role": "top"
+      },
+      {
+        "name": "",
+        "role": "jungle"
+      },
+      {
+        "name": "",
+        "role": "mid"
+      },
+      {
+        "name": "",
+        "role": "adc"
+      },
+      {
+        "name": "",
+        "role": "support"
+      }
+    ]
+  }
+}

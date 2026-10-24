@@ -1,0 +1,47 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
+  border: 0;
+  border-radius: var(--radius-panel);
+  background: var(--surface-app-chrome);
+  color: var(--color-fog);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+.card:hover {
+  background: var(--surface-app-surface);
+}
+
+.logo {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 0.5rem;
+}
+
+.name {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* jugador que ya es campeón del mundo */
+.champion {
+  background: linear-gradient(135deg, rgba(253, 162, 32, 0.2), var(--surface-app-surface) 70%);
+  border: 1px solid rgba(253, 162, 32, 0.55);
+}
+
+.note {
+  margin: 0;
+  padding: 0 28px 24px;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .note {
+    padding: 0 16px 16px;
+  }
+}

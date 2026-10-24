@@ -100,7 +100,24 @@
   },
   "participants": {
     "title": "참가 팀",
-    "subtitle": "이번 대회에서 우승에 도전하는 팀들입니다."
+    "subtitle": "이번 대회에서 우승에 도전하는 팀들입니다.",
+    "viewRoster": "{team} 로스터 보기",
+    "rosterTitle": "이번 대회 로스터",
+    "loading": "로스터를 불러오는 중…",
+    "empty": "이 팀의 로스터는 아직 확인되지 않았습니다.",
+    "note": "로스터는 LoL Esports 기준이며 교체 선수가 포함될 수 있습니다.",
+    "close": "닫기",
+    "cupsWith": "우승 소속팀",
+    "cupOne": "회 우승",
+    "cupMany": "회 우승",
+    "substitute": "교체 선수",
+    "roles": {
+      "top": "탑",
+      "jungle": "정글",
+      "mid": "미드",
+      "adc": "원딜",
+      "support": "서포터"
+    }
   },
   "swiss": {
     "title": "스위스 스테이지",

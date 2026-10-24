@@ -99,6 +99,12 @@
     "GPL": "GPL · Taiwán y SEA"
   },
   "participants": {
+    "rosterTitle": "Roster actual",
+    "close": "Cerrar",
+    "rosterLoading": "Cargando roster…",
+    "rosterEmpty": "Roster no disponible por ahora.",
+    "substitute": "Suplente",
+    "roles": {"top": "Top", "jungle": "Jungla", "mid": "Mid", "adc": "ADC", "support": "Soporte"},
     "title": "Equipos en competencia",
     "subtitle": "Las organizaciones listas para la gloria en este torneo."
   },

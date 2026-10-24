@@ -60,3 +60,34 @@ export function getRoster(year: number, champions: Champion[]): PlayerView[] {
   // titulares primero, suplentes al final (el orden por rol es el del archivo)
   return views.sort((a, b) => Number(a.sub) - Number(b.sub));
 }
+
+export type PlayerHistory = {
+  titles: number;
+  teams: { team: string; years: number[] }[];
+};
+
+const normName = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+/**
+ * Copas mundiales y equipos de CUALQUIER jugador, buscando su apodo en rosters.json
+ * (sin distinguir mayúsculas). Sirve para resaltar a los campeones en el roster actual.
+ */
+export function getPlayerHistory(name: string, champions: Champion[]): PlayerHistory {
+  const key = normName(name);
+  if (!key) return { titles: 0, teams: [] };
+
+  const teamOfYear = new Map(champions.map((c) => [c.year, c.teamAtTime]));
+  const wonYears = rosters
+    .filter((r) => r.players.some((x) => normName(x.name) === key))
+    .map((r) => r.year)
+    .sort((a, b) => a - b);
+
+  const teams: PlayerHistory["teams"] = [];
+  for (const y of wonYears) {
+    const team = teamOfYear.get(y) ?? "";
+    const found = teams.find((t) => t.team === team);
+    if (found) found.years.push(y);
+    else teams.push({ team, years: [y] });
+  }
+  return { titles: wonYears.length, teams };
+}

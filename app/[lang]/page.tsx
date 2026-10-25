@@ -42,7 +42,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         />
 
         {/* Equipos en competencia */}
-        <ParticipantsSection t={t.participants} />
+        <ParticipantsSection t={t.participants} cups={{ one: t.hall.cupOne, many: t.hall.cupMany }} />
 
         {/* Fases del torneo (Play-In, Swiss, Knockout) */}
         <TournamentPhases lang={lang} t={t.swiss} tKnockout={t.knockout} />

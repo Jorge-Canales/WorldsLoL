@@ -5,6 +5,10 @@ import Image from "next/image";
 import type { Dict } from "@/lib/i18n";
 import participantsData from "@/data/participants.json";
 import { useRosters } from "@/lib/useRosters";
+import { getPlayerHistory } from "@/lib/roster";
+import championsData from "@/data/champions.json";
+import type { Champion } from "@/lib/types";
+import styles from "./ParticipantsSection.module.css";
 
 export type Participant = {
   id: string;
@@ -14,8 +18,16 @@ export type Participant = {
 };
 
 const participants = participantsData as Participant[];
+const champions = championsData as Champion[];
 
-export default function ParticipantsSection({ t }: { t: Dict["participants"] }) {
+export default function ParticipantsSection({
+  t,
+  cups,
+}: {
+  t: Dict["participants"];
+  /** Textos "copa mundial" / "copas mundiales" (vienen de t.hall) para el lector de pantalla */
+  cups: { one: string; many: string };
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [active, setActive] = useState<Participant | null>(null);
@@ -33,7 +45,8 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
     if (active && d && !d.open) d.showModal();
   }, [active]);
 
-  const roster = active ? data?.[active.id]?.players ?? [] : [];
+  // Los suplentes no se muestran: solo los titulares del equipo.
+  const roster = (active ? data?.[active.id]?.players ?? [] : []).filter((p) => !p.sub);
 
   return (
     <section className="section container">
@@ -99,14 +112,24 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
 
         {roster.length > 0 ? (
           <ul className="roster-list">
-            {roster.map((p) => (
+            {roster.map((p) => {
+              // Una estrella por cada Worlds ganado (se busca el apodo en data/rosters.json)
+              const titles = getPlayerHistory(p.name, champions).titles;
+              return (
               <li className="player" key={`${p.role}-${p.name}`}>
                 <div className="player-name-row">
                   <h4 className="player-name">{p.name}</h4>
-                  <span className={`player-role${p.sub ? " player-role-sub" : ""}`}>
-                    {t.roles[p.role]}
-                    {p.sub ? ` · ${t.substitute}` : ""}
-                  </span>
+                  {titles > 0 && (
+                    <span
+                      className={styles.stars}
+                      role="img"
+                      aria-label={`${titles} ${titles === 1 ? cups.one : cups.many}`}
+                      title={`${titles} ${titles === 1 ? cups.one : cups.many}`}
+                    >
+                      {"★".repeat(titles)}
+                    </span>
+                  )}
+                  <span className="player-role">{t.roles[p.role]}</span>
                 </div>
                 {p.realName && <p className="player-current">{p.realName}</p>}
                 {p.image && (
@@ -124,7 +147,8 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
                   />
                 )}
               </li>
-            ))}
+              );
+            })}
           </ul>
         ) : (
           <p className="muted" style={{ padding: "0 28px 28px", minHeight: "16rem" }}>

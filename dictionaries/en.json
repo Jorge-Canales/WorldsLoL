@@ -80,6 +80,8 @@
     "towers": "Towers",
     "dragons": "Dragons",
     "barons": "Barons",
+    "grubs": "Grubs",
+    "heralds": "Herald",
     "inhibitors": "Inhibitors",
     "paused": "Paused",
     "delayNote": "Game stats are about 1 minute behind."

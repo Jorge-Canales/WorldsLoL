@@ -125,6 +125,9 @@ export type SideStats = {
   dragons: string[];
   barons: number;
   inhibitors: number;
+  /** Heraldos y larvas del vacío: null si el feed no trae ese dato. */
+  heralds: number | null;
+  grubs: number | null;
 };
 
 export type LiveGameInfo = {
@@ -133,6 +136,8 @@ export type LiveGameInfo = {
   paused: boolean;
   /** Estadísticas por sigla de equipo (la misma sigla que usa el calendario). */
   byCode: Record<string, SideStats>;
+  /** Nombres de los campos que trae el feed por equipo (solo para depurar con ?debug). */
+  teamKeys: string[];
 };
 
 type FeedTeam = {
@@ -141,6 +146,7 @@ type FeedTeam = {
   dragons?: string[];
   barons?: number;
   inhibitors?: number;
+  [extra: string]: unknown;
 };
 type FeedFrame = {
   rfc460Timestamp?: string;
@@ -210,12 +216,31 @@ async function getLatestFrame(gameId: string): Promise<FeedFrame | null> {
   return null;
 }
 
+/**
+ * Heraldos y larvas: el feed no documenta estos campos, así que se prueban varios nombres
+ * posibles. Un número vale tal cual; una lista vale su longitud. Si ninguno existe → null.
+ */
+const HERALD_KEYS = ["heralds", "riftHeralds", "riftHerald", "herald"];
+const GRUB_KEYS = ["voidGrubs", "grubs", "hordes", "voidgrubs", "voidGrub"];
+
+function countField(t: FeedTeam | undefined, keys: string[]): number | null {
+  if (!t) return null;
+  for (const k of keys) {
+    const v = t[k];
+    if (Array.isArray(v)) return v.length;
+    if (typeof v === "number" && Number.isFinite(v)) return v;
+  }
+  return null;
+}
+
 const toSide = (t?: FeedTeam): SideStats => ({
   kills: Number(t?.totalKills ?? 0),
   towers: Number(t?.towers ?? 0),
   dragons: Array.isArray(t?.dragons) ? t.dragons : [],
   barons: Number(t?.barons ?? 0),
   inhibitors: Number(t?.inhibitors ?? 0),
+  heralds: countField(t, HERALD_KEYS),
+  grubs: countField(t, GRUB_KEYS),
 });
 
 /**
@@ -257,5 +282,6 @@ export async function fetchLiveGame(matchId: string): Promise<LiveGameInfo | nul
     minute,
     paused: frame.gameState === "paused",
     byCode,
+    teamKeys: Object.keys(frame.blueTeam ?? {}),
   };
 }

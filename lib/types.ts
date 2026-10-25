@@ -30,6 +30,9 @@ export type LiveGameTeam = {
   dragons: string[];
   barons: number;
   inhibitors: number;
+  /** Heraldos y larvas del vacío; null/ausente si el feed no los trae. */
+  heralds?: number | null;
+  grubs?: number | null;
 };
 
 export type LiveGame = {

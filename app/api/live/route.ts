@@ -90,6 +90,7 @@ async function addGameStats(matches: LiveMatch[], notes: string[]) {
           return;
         }
         m.gameMinute = info.minute;
+        notes.push(`${m.id}: campos del feed por equipo: ${info.teamKeys.join(", ")}`);
         const [a, b] = m.teams;
         const sa = info.byCode[a.code];
         const sb = info.byCode[b.code];

@@ -47,11 +47,37 @@
   color: var(--color-snow);
   font-variant-numeric: tabular-nums;
 }
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
 .left {
-  text-align: left;
+  justify-content: flex-start;
 }
 .right {
-  text-align: right;
+  justify-content: flex-end;
+}
+
+/* íconos de los dragones tomados (junto al número, hacia el centro del marcador) */
+.drakes {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-radius: var(--radius-pill);
+}
+.drake {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+/* con el Dragón Ancestral: resplandor blanco/gris alrededor de los dragones */
+.elder {
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px 2px rgba(235, 238, 245, 0.55), 0 0 22px 4px rgba(190, 196, 210, 0.3);
 }
 
 /* el valor más bajo se atenúa para que se vea quién va arriba */

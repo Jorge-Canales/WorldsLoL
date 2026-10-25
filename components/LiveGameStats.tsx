@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { fill, type Dict } from "@/lib/i18n";
 import type { LiveGame } from "@/lib/types";
 import styles from "./LiveGameStats.module.css";
@@ -36,9 +39,44 @@ function DrakeIcons({ drakes }: { drakes: string[] }) {
   );
 }
 
+type Side = "blue" | "red";
+
+/**
+ * Número que, cuando sube, muestra un "+N" flotante del color del equipo (azul/rojo):
+ * sube y se desvanece. No aparece al cargar la página, solo cuando cambia.
+ */
+function Num({ value, side }: { value: number; side: Side }) {
+  const [prev, setPrev] = useState(value);
+  const [pops, setPops] = useState<{ id: number; delta: number }[]>([]);
+
+  if (value !== prev) {
+    setPrev(value);
+    if (value > prev) setPops((list) => [...list.slice(-3), { id: value, delta: value - prev }]);
+  }
+
+  return (
+    <span className={styles.num}>
+      {value}
+      {pops.map((p) => (
+        <span
+          key={p.id}
+          aria-hidden="true"
+          className={`${styles.pop} ${side === "blue" ? styles.popBlue : styles.popRed}`}
+          onAnimationEnd={() => setPops((list) => list.filter((x) => x.id !== p.id))}
+        >
+          +{p.delta}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 /** Kills y objetivos del juego en curso, con los dos equipos a los lados (mismo orden que el marcador). */
 export default function LiveGameStats({ game, t }: { game: LiveGame; t: Dict["live"] }) {
   const [a, b] = game.teams;
+  // Sin dato del feed: izquierda = azul, derecha = rojo
+  const sideA: Side = a.side ?? "blue";
+  const sideB: Side = b.side ?? "red";
 
   const rows = [
     { key: "kills", label: t.kills, a: a.kills, b: b.kills },
@@ -62,13 +100,13 @@ export default function LiveGameStats({ game, t }: { game: LiveGame; t: Dict["li
           return (
             <div key={r.key} style={{ display: "contents" }} className={cls}>
               <span className={`${styles.left}${r.a < r.b ? ` ${styles.dim}` : ""}`}>
-                {r.a}
+                <Num value={r.a} side={sideA} />
                 {isDragons && <DrakeIcons drakes={a.dragons} />}
               </span>
               <span className={styles.label}>{r.label}</span>
               <span className={`${styles.right}${r.b < r.a ? ` ${styles.dim}` : ""}`}>
                 {isDragons && <DrakeIcons drakes={b.dragons} />}
-                {r.b}
+                <Num value={r.b} side={sideB} />
               </span>
             </div>
           );

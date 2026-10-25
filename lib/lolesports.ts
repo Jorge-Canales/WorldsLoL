@@ -128,6 +128,8 @@ export type SideStats = {
   /** Heraldos y larvas del vacío: null si el feed no trae ese dato. */
   heralds: number | null;
   grubs: number | null;
+  /** Lado en el que juega el equipo en este juego (azul o rojo). */
+  side: "blue" | "red";
 };
 
 export type LiveGameInfo = {
@@ -233,7 +235,7 @@ function countField(t: FeedTeam | undefined, keys: string[]): number | null {
   return null;
 }
 
-const toSide = (t?: FeedTeam): SideStats => ({
+const toSide = (t?: FeedTeam): Omit<SideStats, "side"> => ({
   kills: Number(t?.totalKills ?? 0),
   towers: Number(t?.towers ?? 0),
   dragons: Array.isArray(t?.dragons) ? t.dragons : [],
@@ -266,7 +268,7 @@ export async function fetchLiveGame(matchId: string): Promise<LiveGameInfo | nul
   for (const team of match.teams ?? []) {
     const side = game.teams?.find((gt) => gt.id === team.id)?.side;
     if (!team.code || (side !== "blue" && side !== "red")) continue;
-    byCode[team.code] = toSide(side === "blue" ? frame.blueTeam : frame.redTeam);
+    byCode[team.code] = { ...toSide(side === "blue" ? frame.blueTeam : frame.redTeam), side };
   }
 
   // Minuto = tiempo entre el primer frame del juego y el último que tenemos.

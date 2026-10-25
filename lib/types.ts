@@ -33,6 +33,8 @@ export type LiveGameTeam = {
   /** Heraldos y larvas del vacío; null/ausente si el feed no los trae. */
   heralds?: number | null;
   grubs?: number | null;
+  /** Lado del equipo en este juego; define el color del "+N" al subir una estadística. */
+  side?: "blue" | "red";
 };
 
 export type LiveGame = {

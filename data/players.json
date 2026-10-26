@@ -5,7 +5,8 @@
       "current": "retired"
     },
     "Cyanide": {
-      "current": "retired"
+      "current": "retired",
+      "deceased": true
     },
     "Shushei": {
       "current": "retired",

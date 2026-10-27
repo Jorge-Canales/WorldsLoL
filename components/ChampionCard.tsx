@@ -67,7 +67,6 @@ export default function ChampionCard({ champion: c, theme, latest, t, region, ho
       className={`feature feature-${theme} champ${latest ? " champ-latest" : ""}`}
       style={{
         position: "relative",
-        isolation: "isolate",
         overflow: "hidden",
         background: "linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.25) 100%)",
       }}
@@ -88,30 +87,31 @@ export default function ChampionCard({ champion: c, theme, latest, t, region, ho
       {/* Logo del campeón con tamaño extra grande (115px) */}
       {logoFile && (
         <div
-          aria-hidden="true"
           style={{
             position: "absolute",
-            top: 0,
-            right: 0,
-            width: "50%",
-            height: "50%",
-            zIndex: -1,
-            pointerEvents: "none",
-            WebkitMaskImage: "linear-gradient(to top right, transparent 0%, #000 100%)",
-            maskImage: "linear-gradient(to top right, transparent 0%, #000 100%)",
+            top: "0.5rem",
+            right: "0.5rem",
+            width: "115px",
+            height: "115px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            opacity: 0.9,
+            filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
           }}
         >
           <img
             src={`/media/logos/winners/${logoFile}`}
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "top right" }}
+            alt={c.teamAtTime}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
           />
         </div>
       )}
 
       <p className="champ-year">{c.year}</p>
       <p className="champ-label">{t.champion}</p>
-      <h3 className="h3 champ-name">
+      <h3 className="h3 champ-name" style={{ paddingRight: logoFile ? "5.5rem" : "0" }}>
+        {c.teamAtTime}
       </h3>
       {renamed && <p className="champ-sub">{fill(t.nowAs, { name: c.org })}</p>}
 

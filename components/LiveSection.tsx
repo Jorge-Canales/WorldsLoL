@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import LiveGameStats from "./LiveGameStats";
+import SideWave from "./SideWave";
 import TeamLogo from "./TeamLogo";
 import { fill, type Dict, type Locale } from "@/lib/i18n";
 import { getPhase } from "@/lib/phase";
 import { useNow } from "@/lib/useNow";
-import type { Champion, Edition, LiveMatch, LiveResponse } from "@/lib/types";
+import type { Champion, Edition, LiveGameTeam, LiveMatch, LiveResponse } from "@/lib/types";
 
 type Props = {
   lang: Locale;
@@ -133,43 +134,65 @@ export default function LiveSection({ lang, t, editions, celebrationDays, champi
 
         {data && data.matches.length > 0 && (
           <ul className="matches">
-            {data.matches.map((m) => (
-              <li key={m.id} className={`match match-${m.status}`}>
-                <div className="match-meta">
-                  <span className={`badge badge-${m.status}`}>{badge[m.status]}</span>
-                  <span className="muted">
-                    {m.stage} · {fill(t.bestOf, { n: m.bestOf })}
-                  </span>
-                  {m.status === "live" && m.gameMinute !== null && (
-                    <span className="muted">{fill(t.minute, { n: m.gameMinute })}</span>
-                  )}
-                  {m.status === "upcoming" && (
+            {data.matches.map((m) => {
+              // Partido en vivo con el lado de cada equipo: el azul va siempre a la izquierda y el rojo
+              // a la derecha (como en la transmisión), y el marcador de la serie los acompaña.
+              const g = m.status === "live" ? m.game : null;
+              const sideKnown =
+                !!g && !!g.teams[0].side && !!g.teams[1].side && g.teams[0].side !== g.teams[1].side;
+              const swap = sideKnown && g!.teams[0].side === "red";
+              const left = swap ? m.teams[1] : m.teams[0];
+              const right = swap ? m.teams[0] : m.teams[1];
+              const viewGame =
+                g && swap
+                  ? { ...g, teams: [g.teams[1], g.teams[0]] as [LiveGameTeam, LiveGameTeam] }
+                  : g;
+              const sideLabel = (side?: "blue" | "red") => (side === "red" ? t.sideRed : t.sideBlue);
+
+              return (
+                <li key={m.id} className={`match match-${m.status}`}>
+                  <div className="match-meta">
+                    <span className={`badge badge-${m.status}`}>{badge[m.status]}</span>
                     <span className="muted">
-                      {fill(t.startsAt, { time: startFmt.format(new Date(m.startTime)) })}
+                      {m.stage} · {fill(t.bestOf, { n: m.bestOf })}
                     </span>
-                  )}
-                </div>
-                <div className="match-teams">
-                  <span className="team" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <TeamLogo code={m.teams[0].code} name={m.teams[0].name} size={28} />
-                    {m.teams[0].name}
-                  </span>
-                  <span className="score">
-                    {m.status === "upcoming"
-                      ? t.vs
-                      : `${m.teams[0].score} – ${m.teams[1].score}`}
-                  </span>
-                  <span
-                    className="team team-right"
-                    style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10 }}
-                  >
-                    {m.teams[1].name}
-                    <TeamLogo code={m.teams[1].code} name={m.teams[1].name} size={28} />
-                  </span>
-                </div>
-                {m.status === "live" && m.game && <LiveGameStats game={m.game} t={t} />}
-              </li>
-            ))}
+                    {m.status === "live" && m.gameMinute !== null && (
+                      <span className="muted">{fill(t.minute, { n: m.gameMinute })}</span>
+                    )}
+                    {m.status === "upcoming" && (
+                      <span className="muted">
+                        {fill(t.startsAt, { time: startFmt.format(new Date(m.startTime)) })}
+                      </span>
+                    )}
+                  </div>
+                  <div className="match-teams">
+                    <span className="team" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                      <TeamLogo code={left.code} name={left.name} size={28} />
+                      {left.name}
+                    </span>
+                    <span className="score">
+                      {m.status === "upcoming" ? t.vs : `${left.score} – ${right.score}`}
+                    </span>
+                    <span
+                      className="team team-right"
+                      style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10 }}
+                    >
+                      {right.name}
+                      <TeamLogo code={right.code} name={right.name} size={28} />
+                    </span>
+
+                    {sideKnown && viewGame && (
+                      <>
+                        <SideWave side="blue" label={sideLabel(viewGame.teams[0].side)} />
+                        <span aria-hidden="true" />
+                        <SideWave side="red" label={sideLabel(viewGame.teams[1].side)} />
+                      </>
+                    )}
+                  </div>
+                  {m.status === "live" && viewGame && <LiveGameStats game={viewGame} t={t} />}
+                </li>
+              );
+            })}
           </ul>
         )}
 

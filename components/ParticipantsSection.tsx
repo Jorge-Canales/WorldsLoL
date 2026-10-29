@@ -1,14 +1,10 @@
 "use client";
 
-import { useId, useLayoutEffect, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import Image from "next/image";
 import type { Dict } from "@/lib/i18n";
 import participantsData from "@/data/participants.json";
 import { useRosters } from "@/lib/useRosters";
-import { getPlayerHistory } from "@/lib/roster";
-import championsData from "@/data/champions.json";
-import type { Champion } from "@/lib/types";
-import styles from "./ParticipantsSection.module.css";
 
 export type Participant = {
   id: string;
@@ -18,16 +14,8 @@ export type Participant = {
 };
 
 const participants = participantsData as Participant[];
-const champions = championsData as Champion[];
 
-export default function ParticipantsSection({
-  t,
-  cups,
-}: {
-  t: Dict["participants"];
-  /** Textos "copa mundial" / "copas mundiales" (vienen de t.hall) para el lector de pantalla */
-  cups: { one: string; many: string };
-}) {
+export default function ParticipantsSection({ t }: { t: Dict["participants"] }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [active, setActive] = useState<Participant | null>(null);
@@ -35,18 +23,11 @@ export default function ParticipantsSection({
 
   const open = (team: Participant) => {
     setActive(team);
+    dialogRef.current?.showModal();
     load();
   };
 
-  // La ventana se abre DESPUÉS de que React ya puso el equipo nuevo y ANTES de pintar:
-  // así nunca se ve un instante el roster del equipo anterior (ese era el "salto" de tamaño).
-  useLayoutEffect(() => {
-    const d = dialogRef.current;
-    if (active && d && !d.open) d.showModal();
-  }, [active]);
-
-  // Los suplentes no se muestran: solo los titulares del equipo.
-  const roster = (active ? data?.[active.id]?.players ?? [] : []).filter((p) => !p.sub);
+  const roster = active ? data?.[active.id]?.players ?? [] : [];
 
   return (
     <section className="section container">
@@ -91,7 +72,6 @@ export default function ParticipantsSection({
         ref={dialogRef}
         className="roster-dialog"
         aria-labelledby={titleId}
-        onClose={() => setActive(null)}
         onClick={(e) => {
           if (e.target === dialogRef.current) dialogRef.current?.close();
         }}
@@ -112,24 +92,14 @@ export default function ParticipantsSection({
 
         {roster.length > 0 ? (
           <ul className="roster-list">
-            {roster.map((p) => {
-              // Una estrella por cada Worlds ganado (se busca el apodo en data/rosters.json)
-              const titles = getPlayerHistory(p.name, champions).titles;
-              return (
+            {roster.map((p) => (
               <li className="player" key={`${p.role}-${p.name}`}>
                 <div className="player-name-row">
                   <h4 className="player-name">{p.name}</h4>
-                  {titles > 0 && (
-                    <span
-                      className={styles.stars}
-                      role="img"
-                      aria-label={`${titles} ${titles === 1 ? cups.one : cups.many}`}
-                      title={`${titles} ${titles === 1 ? cups.one : cups.many}`}
-                    >
-                      {"★".repeat(titles)}
-                    </span>
-                  )}
-                  <span className="player-role">{t.roles[p.role]}</span>
+                  <span className={`player-role${p.sub ? " player-role-sub" : ""}`}>
+                    {t.roles[p.role]}
+                    {p.sub ? ` · ${t.substitute}` : ""}
+                  </span>
                 </div>
                 {p.realName && <p className="player-current">{p.realName}</p>}
                 {p.image && (
@@ -147,11 +117,10 @@ export default function ParticipantsSection({
                   />
                 )}
               </li>
-              );
-            })}
+            ))}
           </ul>
         ) : (
-          <p className="muted" style={{ padding: "0 28px 28px", minHeight: "16rem" }}>
+          <p className="muted" style={{ padding: "0 28px 28px" }}>
             {loading ? t.rosterLoading : t.rosterEmpty}
           </p>
         )}

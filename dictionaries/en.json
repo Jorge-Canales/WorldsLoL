@@ -77,6 +77,7 @@
     },
     "game": "Game {n}",
     "kills": "Kills",
+    "gold": "Gold",
     "towers": "Towers",
     "dragons": "Dragons",
     "barons": "Barons",
@@ -84,7 +85,9 @@
     "heralds": "Herald",
     "inhibitors": "Inhibitors",
     "paused": "Paused",
-    "delayNote": "Game stats are about 1 minute behind."
+    "delayNote": "Game stats are about 1 minute behind.",
+    "sideBlue": "Blue side",
+    "sideRed": "Red side"
   },
   "stats": {
     "title": "The numbers behind the throne",
@@ -106,7 +109,13 @@
     "rosterLoading": "Loading roster…",
     "rosterEmpty": "Roster not available right now.",
     "substitute": "Substitute",
-    "roles": {"top": "Top", "jungle": "Jungle", "mid": "Mid", "adc": "ADC", "support": "Support"},
+    "roles": {
+      "top": "Top",
+      "jungle": "Jungle",
+      "mid": "Mid",
+      "adc": "ADC",
+      "support": "Support"
+    },
     "title": "Competing Teams",
     "subtitle": "The organizations ready to chase glory in this tournament."
   },

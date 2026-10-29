@@ -41,6 +41,9 @@ function DrakeIcons({ drakes }: { drakes: string[] }) {
 
 type Side = "blue" | "red";
 
+/** 52 340 → "52.3k" */
+const fmtGold = (n: number) => `${(n / 1000).toFixed(1)}k`;
+
 /**
  * Número que, cuando sube, muestra un "+N" flotante del color del equipo (azul/rojo):
  * sube y se desvanece. No aparece al cargar la página, solo cuando cambia.
@@ -78,8 +81,16 @@ export default function LiveGameStats({ game, t }: { game: LiveGame; t: Dict["li
   const sideA: Side = a.side ?? "blue";
   const sideB: Side = b.side ?? "red";
 
+  // Oro: solo si el feed lo trae para los dos equipos. La ventaja se muestra junto al que va arriba.
+  const hasGold = typeof a.gold === "number" && typeof b.gold === "number";
+  const goldA = a.gold ?? 0;
+  const goldB = b.gold ?? 0;
+  const leadA = goldA > goldB ? goldA - goldB : 0;
+  const leadB = goldB > goldA ? goldB - goldA : 0;
+
   const rows = [
     { key: "kills", label: t.kills, a: a.kills, b: b.kills },
+    ...(hasGold ? [{ key: "gold", label: t.gold, a: goldA, b: goldB }] : []),
     { key: "towers", label: t.towers, a: a.towers, b: b.towers },
     { key: "dragons", label: t.dragons, a: a.dragons.length, b: b.dragons.length },
     { key: "barons", label: t.barons, a: a.barons, b: b.barons },
@@ -97,16 +108,39 @@ export default function LiveGameStats({ game, t }: { game: LiveGame; t: Dict["li
         {rows.map((r) => {
           const cls = r.key === "kills" ? styles.kills : undefined;
           const isDragons = r.key === "dragons";
+          const isGold = r.key === "gold";
           return (
             <div key={r.key} style={{ display: "contents" }} className={cls}>
               <span className={`${styles.left}${r.a < r.b ? ` ${styles.dim}` : ""}`}>
-                <Num value={r.a} side={sideA} />
+                {isGold ? (
+                  <span className={styles.goldCell}>
+                    {fmtGold(r.a)}
+                    {leadA > 0 && (
+                      <span className={`${styles.lead} ${sideA === "blue" ? styles.leadBlue : styles.leadRed}`}>
+                        +{fmtGold(leadA)}
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <Num value={r.a} side={sideA} />
+                )}
                 {isDragons && <DrakeIcons drakes={a.dragons} />}
               </span>
               <span className={styles.label}>{r.label}</span>
               <span className={`${styles.right}${r.b < r.a ? ` ${styles.dim}` : ""}`}>
                 {isDragons && <DrakeIcons drakes={b.dragons} />}
-                <Num value={r.b} side={sideB} />
+                {isGold ? (
+                  <span className={styles.goldCell}>
+                    {leadB > 0 && (
+                      <span className={`${styles.lead} ${sideB === "blue" ? styles.leadBlue : styles.leadRed}`}>
+                        +{fmtGold(leadB)}
+                      </span>
+                    )}
+                    {fmtGold(r.b)}
+                  </span>
+                ) : (
+                  <Num value={r.b} side={sideB} />
+                )}
               </span>
             </div>
           );

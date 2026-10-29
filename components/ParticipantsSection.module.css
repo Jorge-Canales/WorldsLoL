@@ -45,12 +45,3 @@
     padding: 0 16px 16px;
   }
 }
-
-/* estrellas junto al apodo: una por cada Worlds ganado */
-.stars {
-  color: var(--color-ember-orange);
-  font-size: 18px;
-  line-height: 1;
-  letter-spacing: 2px;
-  white-space: nowrap;
-}

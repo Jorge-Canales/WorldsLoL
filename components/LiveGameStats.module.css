@@ -99,6 +99,27 @@
   color: var(--color-fog);
 }
 
+/* ===== Oro: valor + ventaja ("+2.4k") junto al equipo que va arriba ===== */
+.goldCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.lead {
+  padding: 1px 9px;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+.leadBlue {
+  background: #2f8cff;
+}
+.leadRed {
+  background: #ff3b4e;
+}
+
 /* ===== "+N" flotante cuando sube una estadística ===== */
 .num {
   position: relative;

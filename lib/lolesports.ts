@@ -128,6 +128,8 @@ export type SideStats = {
   /** Heraldos y larvas del vacío: null si el feed no trae ese dato. */
   heralds: number | null;
   grubs: number | null;
+  /** Oro total del equipo en este juego; null si el feed no trae ese dato. */
+  gold: number | null;
   /** Lado en el que juega el equipo en este juego (azul o rojo). */
   side: "blue" | "red";
 };
@@ -148,6 +150,7 @@ type FeedTeam = {
   dragons?: string[];
   barons?: number;
   inhibitors?: number;
+  totalGold?: number;
   [extra: string]: unknown;
 };
 type FeedFrame = {
@@ -241,6 +244,7 @@ const toSide = (t?: FeedTeam): Omit<SideStats, "side"> => ({
   dragons: Array.isArray(t?.dragons) ? t.dragons : [],
   barons: Number(t?.barons ?? 0),
   inhibitors: Number(t?.inhibitors ?? 0),
+  gold: typeof t?.totalGold === "number" && Number.isFinite(t.totalGold) ? t.totalGold : null,
   heralds: countField(t, HERALD_KEYS),
   grubs: countField(t, GRUB_KEYS),
 });

@@ -5,6 +5,8 @@ import Image from "next/image";
 import type { Dict } from "@/lib/i18n";
 import participantsData from "@/data/participants.json";
 import { useRosters } from "@/lib/useRosters";
+import championsData from "@/data/champions.json";
+import type { Champion } from "@/lib/types";
 
 export type Participant = {
   id: string;
@@ -14,8 +16,17 @@ export type Participant = {
 };
 
 const participants = participantsData as Participant[];
+const champions = championsData as Champion[];
 
-export default function ParticipantsSection({ t }: { t: Dict["participants"] }) {
+const titlesFor = (name: string) => champions.filter((c) => c.org === name).length;
+
+export default function ParticipantsSection({
+  t,
+  cups,
+}: {
+  t: Dict["participants"];
+  cups: { one: string; many: string };
+}) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = useId();
   const [active, setActive] = useState<Participant | null>(null);
@@ -64,6 +75,11 @@ export default function ParticipantsSection({ t }: { t: Dict["participants"] }) 
               />
             </div>
             <span style={{ fontSize: "0.8rem", fontWeight: 600 }}>{team.name}</span>
+            {titlesFor(team.name) > 0 && (
+              <span className="muted" style={{ fontSize: "0.7rem", marginTop: "0.25rem" }}>
+                {titlesFor(team.name)} {titlesFor(team.name) === 1 ? cups.one : cups.many}
+              </span>
+            )}
           </div>
         ))}
       </div>

@@ -7,6 +7,7 @@ import participantsData from "@/data/participants.json";
 import { useRosters } from "@/lib/useRosters";
 import championsData from "@/data/champions.json";
 import type { Champion } from "@/lib/types";
+import { getPlayerHistory } from "@/lib/roster";
 
 export type Participant = {
   id: string;
@@ -19,6 +20,21 @@ const participants = participantsData as Participant[];
 const champions = championsData as Champion[];
 
 const titlesFor = (name: string) => champions.filter((c) => c.org === name).length;
+
+/** Una estrella por copa mundial. */
+function Stars({ n, label }: { n: number; label: string }) {
+  if (n <= 0) return null;
+  return (
+    <span
+      role="img"
+      aria-label={`${n} ${label}`}
+      title={`${n} ${label}`}
+      style={{ color: "var(--color-ember-orange)", letterSpacing: "0.05em", lineHeight: 1 }}
+    >
+      {"★".repeat(n)}
+    </span>
+  );
+}
 
 export default function ParticipantsSection({
   t,
@@ -38,7 +54,8 @@ export default function ParticipantsSection({
     load();
   };
 
-  const roster = active ? data?.[active.id]?.players ?? [] : [];
+  // Solo los jugadores principales (sin suplentes).
+  const roster = (active ? data?.[active.id]?.players ?? [] : []).filter((p) => !p.sub);
 
   return (
     <section className="section container">
@@ -76,8 +93,8 @@ export default function ParticipantsSection({
             </div>
             <span style={{ fontSize: "0.8rem", fontWeight: 600 }}>{team.name}</span>
             {titlesFor(team.name) > 0 && (
-              <span className="muted" style={{ fontSize: "0.7rem", marginTop: "0.25rem" }}>
-                {titlesFor(team.name)} {titlesFor(team.name) === 1 ? cups.one : cups.many}
+              <span style={{ fontSize: "0.8rem", marginTop: "0.25rem" }}>
+                <Stars n={titlesFor(team.name)} label={titlesFor(team.name) === 1 ? cups.one : cups.many} />
               </span>
             )}
           </div>
@@ -112,10 +129,15 @@ export default function ParticipantsSection({
               <li className="player" key={`${p.role}-${p.name}`}>
                 <div className="player-name-row">
                   <h4 className="player-name">{p.name}</h4>
-                  <span className={`player-role${p.sub ? " player-role-sub" : ""}`}>
-                    {t.roles[p.role]}
-                    {p.sub ? ` · ${t.substitute}` : ""}
-                  </span>
+                  {(() => {
+                    const n = getPlayerHistory(p.name, champions).titles;
+                    return (
+                      <span style={{ fontSize: "1.1rem" }}>
+                        <Stars n={n} label={n === 1 ? cups.one : cups.many} />
+                      </span>
+                    );
+                  })()}
+                  <span className="player-role">{t.roles[p.role]}</span>
                 </div>
                 {p.realName && <p className="player-current">{p.realName}</p>}
                 {p.image && (

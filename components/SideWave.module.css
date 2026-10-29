@@ -1,0 +1,24 @@
+/* Barra sólida con el borde superior ondulado; la ola se desplaza sin parar. */
+.wave {
+  height: 10px;
+  margin-top: -6px;
+  background-repeat: repeat-x;
+  background-size: 40px 10px;
+  animation: wave-move 2.4s linear infinite;
+}
+
+.blue {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10' preserveAspectRatio='none'%3E%3Cpath d='M0 5 Q10 0 20 5 T40 5 V10 H0 Z' fill='%232f8cff'/%3E%3C/svg%3E");
+}
+.red {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10' preserveAspectRatio='none'%3E%3Cpath d='M0 5 Q10 0 20 5 T40 5 V10 H0 Z' fill='%23ff3b4e'/%3E%3C/svg%3E");
+}
+
+@keyframes wave-move {
+  from { background-position-x: 0; }
+  to { background-position-x: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave { animation: none; }
+}

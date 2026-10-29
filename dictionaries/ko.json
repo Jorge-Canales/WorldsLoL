@@ -77,12 +77,17 @@
     },
     "game": "{n}게임",
     "kills": "킬",
+    "gold": "골드",
     "towers": "타워",
     "dragons": "드래곤",
     "barons": "바론",
+    "grubs": "유충",
+    "heralds": "전령",
     "inhibitors": "억제기",
     "paused": "일시정지",
-    "delayNote": "경기 통계는 약 1분 지연됩니다."
+    "delayNote": "경기 통계는 약 1분 지연됩니다.",
+    "sideBlue": "블루 진영",
+    "sideRed": "레드 진영"
   },
   "stats": {
     "title": "왕좌 뒤에 숨은 숫자들",

@@ -91,12 +91,14 @@ export default function ParticipantsSection({
                 unoptimized
               />
             </div>
-            <span style={{ fontSize: "0.8rem", fontWeight: 600 }}>{team.name}</span>
-            {titlesFor(team.name) > 0 && (
-              <span style={{ fontSize: "0.8rem", marginTop: "0.25rem" }}>
+            {/* Fila de estrellas arriba del nombre. Siempre ocupa su espacio, así los
+                nombres quedan alineados aunque el equipo no tenga copas. */}
+            <span style={{ fontSize: "0.8rem", minHeight: "1rem", marginBottom: "0.25rem" }}>
+              {titlesFor(team.name) > 0 && (
                 <Stars n={titlesFor(team.name)} label={titlesFor(team.name) === 1 ? cups.one : cups.many} />
-              </span>
-            )}
+              )}
+            </span>
+            <span style={{ fontSize: "0.8rem", fontWeight: 600 }}>{team.name}</span>
           </div>
         ))}
       </div>

@@ -3,8 +3,8 @@
   "celebrationDays": 7,
   "phasesControl": {
         "playInActive": false,
-        "swissActive": true,
-        "knockoutActive": false
+        "swissActive": false,
+        "knockoutActive": true
       },
       "editions": [ 
         {
